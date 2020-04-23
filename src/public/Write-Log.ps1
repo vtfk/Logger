@@ -19,7 +19,7 @@
     .PARAMETER Body
         An object that can contain additional log metadata (used in target like ElasticSearch)
 
-    .PARAMETER ExceptionInfo
+    .PARAMETER Exception
         An optional ErrorRecord
 
     .EXAMPLE
@@ -38,7 +38,7 @@
         https://logging.readthedocs.io/en/latest/functions/Write-Log.md
 
     .LINK
-        https://logging.readthedocs.io/en/latest/functions/Add-LoggingLevel.md
+        https://logging.readthedocs.io/en/latest/functions/Add-LogLevel.md
 
     .LINK
         https://github.com/EsOsO/Logging/blob/master/Logging/public/Write-Log.ps1
@@ -57,11 +57,11 @@ Function Write-Log {
         [object] $Body = $null,
         [Parameter(Position = 5,
             Mandatory = $false)]
-        [System.Management.Automation.ErrorRecord] $ExceptionInfo = $null
+        [System.Management.Automation.ErrorRecord] $Exception = $null
     )
 
     DynamicParam {
-        New-LoggingDynamicParam -Level -Mandatory $false -Name "Level"
+        New-LogDynamicParam -Level -Mandatory $false -Name "Level"
         $PSBoundParameters["Level"] = "INFO"
     }
 
@@ -81,9 +81,9 @@ Function Write-Log {
             $fileName = Split-Path -Path $invocationInfo.ScriptName -Leaf
         }
 
-        $logMessage = [hashtable] @{
-            timestamp    = Get-Date -UFormat $Defaults.Timestamp
-            timestamputc = Get-Date ([datetime]::UtcNow) -UFormat $Defaults.Timestamp
+        $Log = [hashtable] @{
+            timestamp    = Get-Date -Format $Defaults.Timestamp
+            timestamputc = Get-Date ([datetime]::UtcNow) -Format $Defaults.Timestamp
             level        = Get-LevelName -Level $levelNumber
             levelno      = $levelNumber
             lineno       = $invocationInfo.ScriptLineNumber
@@ -92,11 +92,28 @@ Function Write-Log {
             caller       = $invocationInfo.Command
             message      = $messageText
             body         = $Body
-            execinfo     = $ExceptionInfo
+            exception     = $Exception
             pid          = $PID
         }
 
-        #This variable is initiated via Start-LoggingManager
-        $Script:LoggingEventQueue.Add($logMessage)
+        if ($Script:Logging.EnabledTargets) {
+            try {
+                #Enumerating through a collection is intrinsically not a thread-safe procedure
+                for ($targetEnum = $Script:Logging.EnabledTargets.GetEnumerator(); $targetEnum.MoveNext(); ) {
+                    [string] $LoggingTarget = $targetEnum.Current.key
+                    [hashtable] $TargetConfiguration = $targetEnum.Current.Value
+                    $Logger = [scriptblock] $Script:Logging.Targets[$LoggingTarget].Logger
+
+                    $targetLevelNo = Get-LevelNumber -Level $TargetConfiguration.Level
+
+                    if ($Log.LevelNo -ge $targetLevelNo) {
+                        Invoke-Command -ScriptBlock $Logger -ArgumentList @($Log, $TargetConfiguration)
+                    }
+                }
+            }
+            catch {
+                Write-Error $_
+            }
+        }
     }
 }

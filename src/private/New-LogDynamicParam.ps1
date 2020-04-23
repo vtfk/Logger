@@ -3,7 +3,7 @@
 Creates the param used inside the DynamicParam{}-Block
 
 .DESCRIPTION
-New-LoggingDynamicParam creates (or appends) a RuntimeDefinedParameterDictionary
+New-LogDynamicParam creates (or appends) a RuntimeDefinedParameterDictionary
 with a parameter whos value is validated through a dynamic validate set.
 
 .PARAMETER Name
@@ -23,16 +23,16 @@ Controls if parameter is mandatory for call. Defaults to $true
 
 .EXAMPLE
 DynamicParam{
-    New-LoggingDynamicParam -Name "Level" -Level -DefaultValue 'Verbose'
+    New-LogDynamicParam -Name "Level" -Level -DefaultValue 'Verbose'
 }
 
 DynamicParam{
-    $dictionary = New-LoggingDynamicParam -Name "Level" -Level
-    New-LoggingDynamicParam -Name "Target" -Target -DynamicParams $dictionary
+    $dictionary = New-LogDynamicParam -Name "Level" -Level
+    New-LogDynamicParam -Name "Target" -Target -DynamicParams $dictionary
 }
 #>
 
-function New-LoggingDynamicParam {
+function New-LogDynamicParam {
     [OutputType([System.Management.Automation.RuntimeDefinedParameterDictionary])]
     [CmdletBinding(DefaultParameterSetName = "DynamicTarget")]
     param(

@@ -18,22 +18,22 @@
         The human redable name to assign to the level
 
     .EXAMPLE
-        PS C:\> Add-LoggingLevel -Level 41 -LevelName CRITICAL
+        PS C:\> Add-LogLevel -Level 41 -LevelName CRITICAL
 
     .EXAMPLE
-        PS C:\> Add-LoggingLevel -Level 15 -LevelName VERBOSE
+        PS C:\> Add-LogLevel -Level 15 -LevelName VERBOSE
 
     .LINK
-        https://logging.readthedocs.io/en/latest/functions/Add-LoggingLevel.md
+        https://logging.readthedocs.io/en/latest/functions/Add-LogLevel.md
 
     .LINK
         https://logging.readthedocs.io/en/latest/functions/Write-Log.md
 
     .LINK
-        https://github.com/EsOsO/Logging/blob/master/Logging/public/Add-LoggingLevel.ps1
+        https://github.com/EsOsO/Logging/blob/master/Logging/public/Add-LogLevel.ps1
 #>
-function Add-LoggingLevel {
-    [CmdletBinding(HelpUri='https://logging.readthedocs.io/en/latest/functions/Add-LoggingLevel.md')]
+function Add-LogLevel {
+    [CmdletBinding(HelpUri='https://logging.readthedocs.io/en/latest/functions/Add-LogLevel.md')]
     param(
         [Parameter(Mandatory)]
         [int] $Level,

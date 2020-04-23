@@ -10,26 +10,26 @@
         The level severity name to set as default for enabled targets
 
     .EXAMPLE
-        PS C:\> Set-LoggingDefaultLevel -Level ERROR
+        PS C:\> Set-LogDefaultLevel -Level ERROR
 
         PS C:\> Write-Log -Level INFO -Message "Test"
         => Discarded.
 
     .LINK
-        https://logging.readthedocs.io/en/latest/functions/Set-LoggingDefaultLevel.md
+        https://logging.readthedocs.io/en/latest/functions/Set-LogDefaultLevel.md
 
     .LINK
         https://logging.readthedocs.io/en/latest/functions/Write-Log.md
 
     .LINK
-        https://github.com/EsOsO/Logging/blob/master/Logging/public/Set-LoggingDefaultLevel.ps1
+        https://github.com/EsOsO/Logging/blob/master/Logging/public/Set-LogDefaultLevel.ps1
 #>
-function Set-LoggingDefaultLevel {
-    [CmdletBinding(HelpUri = 'https://logging.readthedocs.io/en/latest/functions/Set-LoggingDefaultLevel.md')]
+function Set-LogDefaultLevel {
+    [CmdletBinding(HelpUri = 'https://logging.readthedocs.io/en/latest/functions/Set-LogDefaultLevel.md')]
     param()
 
     DynamicParam {
-        New-LoggingDynamicParam -Name "Level" -Level
+        New-LogDynamicParam -Name "Level" -Level
     }
 
     End {

@@ -1,10 +1,9 @@
 ﻿@{
     Name = 'File'
     Configuration = @{
-        Path        = @{Required = $true;   Type = [string];    Default = $null}
-        PrintBody   = @{Required = $false;  Type = [bool];      Default = $false}
+        Path        = @{Required = $false;  Type = [string];    Default = $null}
         Append      = @{Required = $false;  Type = [bool];      Default = $true}
-        Encoding    = @{Required = $false;  Type = [string];    Default = 'ascii'}
+        Encoding    = @{Required = $false;  Type = [string];    Default = 'utf8'}
         Level       = @{Required = $false;  Type = [string];    Default = $Logging.Level}
         Format      = @{Required = $false;  Type = [string];    Default = $Logging.Format}
     }
@@ -15,13 +14,40 @@
             [hashtable] $Configuration
         )
 
-        if ($Configuration.PrintBody -and $Log.Body) {
-            $Log.Body = $Log.Body | ConvertTo-Json -Compress
-        } elseif (-not $Configuration.PrintBody -and $Log.Body) {
-            $Log.Remove('Body')
+        if ($Log.Verbose)
+        {
+            $VerbosePreference = "Continue"
         }
 
-        $Text = Replace-Token -String $Configuration.Format -Source $Log
+        [string]$Text = ""
+
+        if ($Log.Body)
+        {
+            $Body = $Log.Body | ConvertTo-Json -Compress
+
+            if(!$Configuration.Format.Contains("%body%"))
+            {
+                $Text += "`n`t$Body"
+            }
+        }
+
+        if ($Log.Exception)
+        {
+            if ($Log.Exception.PSobject.Properties.name -match "InvocationInfo")
+            {
+                $Text += "`n$($Log.Exception.InvocationInfo.PositionMessage)"
+            }
+
+            if ($Log.Exception.PSobject.Properties.name -match "Exception")
+            {
+                $Text += "`n`n$($Log.Exception.Exception)"
+            }
+        }
+
+        # get log path (and create it if blabla.....)
+        $Configuration.Path = Get-LogPath -CallingScriptPath $Log.pathname -Config $Configuration
+
+        $Text = "$(Replace-Token -String $Configuration.Format -Source $Log) $Text"
 
         $Params = @{
             Append      = $Configuration.Append
@@ -29,6 +55,7 @@
             Encoding    = $Configuration.Encoding
         }
 
+        Write-Verbose "[Logger/File] Logging to: $($Params.FilePath)"
         $Text | Out-File @Params
     }
 }

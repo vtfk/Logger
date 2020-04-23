@@ -1,15 +1,15 @@
-@{
+﻿@{
     Name = 'Teams'
     Configuration = @{
-        WebHook = @{Required = $true; Type = [string]; Default = $null }
-        Details = @{Required = $false; Type = [bool]; Default = $true}
-        Level   = @{Required = $false; Type = [string]; Default = $Logging.Level}
-        Colors  = @{Required = $false; Type = [hashtable]; Default = @{
-            'DEBUG' = 'blue'
-            'INFO' = 'brightgreen'
-            'WARNING' = 'orange'
-            'ERROR' = 'red'
-        }}
+        WebHook     = @{Required = $true;  Type = [string]; Default = $null}
+        Level       = @{Required = $false; Type = [string]; Default = $Logging.Level}
+        Format      = @{Required = $false; Type = [string]; Default = "%message%"}
+        ColorMapping = @{Required = $false; Type = [hashtable]; Default = @{
+                                                            'DEBUG'   = '999999'
+                                                            'INFO'    = '0087ff'
+                                                            'WARNING' = 'ffdd00'
+                                                            'ERROR'   = 'ff0000'
+                                                        }}
     }
     Logger = {
         param(
@@ -17,42 +17,58 @@
             [hashtable] $Configuration
         )
 
-        $Payload = [ordered] @{
-            '@type' = 'MessageCard'
-            '@context' = 'https://schema.org/extensions'
-            summary = '[{0}] {1}' -f $Log.Level, $Log.Message
-            themeColor = '#0078D7'
-            title = $Log.Message
-            text = '![{0}](https://raster.shields.io/static/v1?label=Logging&message={0}&color={1}&style=flat)' -f $Log.Level, $Configuration.Colors[$Log.Level]
+        if ($Log.Verbose)
+        {
+            $VerbosePreference = "Continue"
         }
 
-        $sections = @()
-
-        if ($Log.Body) {
-            $body = [ordered] @{}
-            $body.activitySubtitle = 'Body'
-            $body.text = $Log.Body | ConvertTo-Json -Depth 3 -Compress
-            $sections += $body
+        $Text = @{
+            '@type' = "MessageCard"
+            '@context' = "https://schema.org/extensions"
+            summary = "$($Log.level): $(Replace-Token -String $Configuration.Format -Source $Log)"
+            text = Replace-Token -String $Configuration.Format -Source $Log
+            sections = @()
         }
 
-        if ($Configuration.Details) {
-            $details = [ordered] @{}
-            $details.activitySubtitle = 'Details'
-            $details.facts = $Log.Keys | ?{$_ -notin 'message', 'body'} | sort | %{
-                [ordered] @{
-                    name = $_
-                    value = if ([string]::IsNullOrEmpty($Log[$_])) {'(none)'} else {[string] $Log[$_]}
-                }
+        if ($Configuration.ColorMapping[$Log.Level]) {
+            $Text['themeColor'] = $Configuration.ColorMapping[$Log.Level]
+        } else {
+            $Text['themeColor'] = 'ffffff'
+        }
+
+        # If an object or exception is defined, add object to message in json format.
+        if ($Log.Body)
+        {
+            $Text['sections'] += @{ title = "**Body**"; text = "$($Log.Body | ConvertTo-Json -Depth 10)" }
+        }
+        if ($Log.Exception)
+        {
+            $Exception = $Log.Exception
+            if($Exception.PSobject.Properties.name -match "Exception")
+            {
+                $Exception = $Log.Exception.Exception
             }
-            $sections += $details
+
+            $errorDetails = @()
+
+            if($Exception.PSobject.Properties.name -match "Message")
+            {
+                $errorDetails += @{ Name  = "Message"; Value = $Exception.Message }
+            }
+
+            if($Exception.PSobject.Properties.name -match "InnerException" -and $Exception.InnerException)
+            {
+                $errorDetails += @{ Name  = "InnerException"; Value = "$($Exception.InnerException)" }
+            }
+
+            if($Exception.PSobject.Properties.name -match "StackTrace")
+            {
+                $errorDetails += @{ Name  = "StackTrace"; Value = "$($Exception.StackTrace.Replace("at ", "`nat "))" }
+            }
+
+            $Text['sections'] += @{ title = "**Exception**"; facts = $errorDetails }
         }
 
-        if ($sections) {
-            $Payload.sections = $sections
-        }
-
-        $Payload = $Payload | ConvertTo-Json -Depth 5 -Compress
-
-        Invoke-RestMethod -Method POST -Uri $Configuration.WebHook -Body $Payload -ContentType 'application/json; charset=UTF-8' | Out-Null
+        Invoke-RestMethod -Method POST -Uri $Configuration.WebHook -ContentType "application/json; charset=utf-8" -Body ($Text | ConvertTo-Json -Depth 5) -ErrorAction SilentlyContinue | Out-Null
     }
 }

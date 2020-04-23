@@ -1,3 +1,7 @@
 .gitconfig
 BuildOutput/
 *.xml
+
+# Ignore prod folder
+prod/
+**/prod/

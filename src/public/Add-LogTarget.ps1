@@ -8,27 +8,27 @@
     .PARAMETER Configuration
         An hashtable containing the configurations for the target
     .EXAMPLE
-        PS C:\> Add-LoggingTarget -Name Console -Configuration @{Level = 'DEBUG'}
+        PS C:\> Add-LogTarget -Name Console -Configuration @{Level = 'DEBUG'}
     .EXAMPLE
-        PS C:\> Add-LoggingTarget -Name File -Configuration @{Level = 'INFO'; Path = 'C:\Temp\script.log'}
+        PS C:\> Add-LogTarget -Name File -Configuration @{Level = 'INFO'; Path = 'C:\Temp\script.log'}
     .LINK
-        https://logging.readthedocs.io/en/latest/functions/Add-LoggingTarget.md
+        https://logging.readthedocs.io/en/latest/functions/Add-LogTarget.md
     .LINK
         https://logging.readthedocs.io/en/latest/functions/Write-Log.md
     .LINK
         https://logging.readthedocs.io/en/latest/AvailableTargets.md
     .LINK
-        https://github.com/EsOsO/Logging/blob/master/Logging/public/Add-LoggingTarget.ps1
+        https://github.com/EsOsO/Logging/blob/master/Logging/public/Add-LogTarget.ps1
 #>
-function Add-LoggingTarget {
-    [CmdletBinding(HelpUri='https://logging.readthedocs.io/en/latest/functions/Add-LoggingTarget.md')]
+function Add-LogTarget {
+    [CmdletBinding(HelpUri='https://logging.readthedocs.io/en/latest/functions/Add-LogTarget.md')]
     param(
         [Parameter(Position = 2)]
         [hashtable] $Configuration = @{}
     )
 
     DynamicParam {
-        New-LoggingDynamicParam -Name 'Name' -Target
+        New-LogDynamicParam -Name 'Name' -Target
     }
 
     End {

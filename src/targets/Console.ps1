@@ -5,10 +5,11 @@
         Level        = @{Required = $false; Type = [string];    Default = $Logging.Level}
         Format       = @{Required = $false; Type = [string];    Default = $Logging.Format}
         ColorMapping = @{Required = $false; Type = [hashtable]; Default = @{
-                                                                    'DEBUG'   = 'Blue'
-                                                                    'INFO'    = 'Green'
+                                                                    'DEBUG'   = 'Grey'
+                                                                    'INFO'    = 'Cyan'
                                                                     'WARNING' = 'Yellow'
                                                                     'ERROR'   = 'Red'
+                                                                    'SUCCESS' = 'Green'
                                                                 }
         }
     }
@@ -21,7 +22,7 @@
             $Color = $Configuration.ColorMapping[$Level]
 
             if ($Color -notin ([System.Enum]::GetNames([System.ConsoleColor]))) {
-                $ParentHost.UI.WriteErrorLine("ERROR: Cannot use custom color '$Color': not a valid [System.ConsoleColor] value")
+                Write-Error "ERROR: Cannot use custom color '$Color': not a valid [System.ConsoleColor] value"
                 continue
             }
         }
@@ -35,24 +36,19 @@
         try {
             $logText = Replace-Token -String $Configuration.Format -Source $Log
 
-            if (![String]::IsNullOrWhiteSpace($Log.ExecInfo)) {
-                $logText += "`n" + $Log.ExecInfo.InvocationInfo.PositionMessage
+            if (![String]::IsNullOrWhiteSpace($Log.Exception)) {
+                $logText += "`n" + $Log.Exception.InvocationInfo.PositionMessage
             }
-
-            $mtx = New-Object System.Threading.Mutex($false, 'ConsoleMtx')
-            [void] $mtx.WaitOne()
 
             if ($Configuration.ColorMapping.ContainsKey($Log.Level)) {
-                $ParentHost.UI.WriteLine($Configuration.ColorMapping[$Log.Level], $ParentHost.UI.RawUI.BackgroundColor, $logText)
+                Write-Host $logText -ForegroundColor $Configuration.ColorMapping[$Log.Level]
             } else {
-                $ParentHost.UI.WriteLine($logText)
+                Write-Host $logText
             }
 
-            [void] $mtx.ReleaseMutex()
-            $mtx.Dispose()
         }
         catch {
-            $ParentHost.UI.WriteErrorLine($_)
+            Write-Error $_
         }
     }
 }

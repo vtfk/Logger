@@ -9,15 +9,15 @@
         The string used to format the message to log
 
     .EXAMPLE
-        PS C:\> Set-LoggingDefaultFormat -Format '[%{level:-7}] %{message}'
+        PS C:\> Set-LogDefaultFormat -Format '[%{level:-7}] %{message}'
 
     .EXAMPLE
-        PS C:\> Set-LoggingDefaultFormat
+        PS C:\> Set-LogDefaultFormat
 
         It sets the default format as [%{timestamp:+%Y-%m-%d %T%Z}] [%{level:-7}] %{message}
 
     .LINK
-        https://logging.readthedocs.io/en/latest/functions/Set-LoggingDefaultFormat.md
+        https://logging.readthedocs.io/en/latest/functions/Set-LogDefaultFormat.md
 
     .LINK
         https://logging.readthedocs.io/en/latest/functions/LoggingFormat.md
@@ -26,15 +26,14 @@
         https://logging.readthedocs.io/en/latest/functions/Write-Log.md
 
     .LINK
-        https://github.com/EsOsO/Logging/blob/master/Logging/public/Set-LoggingDefaultFormat.ps1
+        https://github.com/EsOsO/Logging/blob/master/Logging/public/Set-LogDefaultFormat.ps1
 #>
-function Set-LoggingDefaultFormat {
-    [CmdletBinding(HelpUri='https://logging.readthedocs.io/en/latest/functions/Set-LoggingDefaultFormat.md')]
+function Set-LogDefaultFormat {
+    [CmdletBinding(HelpUri='https://logging.readthedocs.io/en/latest/functions/Set-LogDefaultFormat.md')]
     param(
         [string] $Format = $Defaults.Format
     )
 
-    Wait-Logging
     $Script:Logging.Format = $Format
 
     # Setting format on already configured targets

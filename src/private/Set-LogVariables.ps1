@@ -1,4 +1,4 @@
-function Set-LoggingVariables {
+function Set-LogVariables {
 
     #Already setup
     if ($Script:Logging -and $Script:LevelNames) {
@@ -10,6 +10,7 @@ function Set-LoggingVariables {
     $Script:NOTSET = 0
     $Script:DEBUG = 10
     $Script:INFO = 20
+    $Script:SUCCESS = 25
     $Script:WARNING = 30
     $Script:ERROR_ = 40
 
@@ -19,19 +20,21 @@ function Set-LoggingVariables {
         $WARNING  = 'WARNING'
         $INFO     = 'INFO'
         $DEBUG    = 'DEBUG'
+        $SUCCESS  = 'SUCCESS'
         'NOTSET'  = $NOTSET
         'ERROR'   = $ERROR_
         'WARNING' = $WARNING
         'INFO'    = $INFO
         'DEBUG'   = $DEBUG
+        'SUCCESS' = $SUCCESS
     }))
 
     New-Variable -Name ScriptRoot           -Scope Script -Option ReadOnly -Value ([System.IO.Path]::GetDirectoryName($MyInvocation.MyCommand.Module.Path))
     New-Variable -Name Defaults             -Scope Script -Option ReadOnly -Value @{
-        Level       = $LevelNames[$LevelNames['NOTSET']]
-        LevelNo     = $LevelNames['NOTSET']
-        Format      = '[%{timestamp:+%Y-%m-%d %T%Z}] [%{level:-7}] %{message}'
-        Timestamp   = '%Y-%m-%dT%T%Z'
+        Level       = 'INFO'
+        LevelNo     = $LevelNames['INFO']
+        Format      = '[%timestamp%] [%level%] - %message%'
+        Timestamp   = 'dd.MM.yyyy HH:mm:ss'
         CallerScope = 1
     }
 

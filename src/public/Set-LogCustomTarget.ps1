@@ -10,10 +10,10 @@
         A valid path containing *.ps1 files that defines new loggin targets
 
     .EXAMPLE
-        PS C:\> Set-LoggingCustomTarget -Path C:\Logging\CustomTargets
+        PS C:\> Set-LogCustomTarget -Path C:\Logging\CustomTargets
 
     .LINK
-        https://logging.readthedocs.io/en/latest/functions/Set-LoggingCustomTarget.md
+        https://logging.readthedocs.io/en/latest/functions/Set-LogCustomTarget.md
 
     .LINK
         https://logging.readthedocs.io/en/latest/functions/CustomTargets.md
@@ -22,21 +22,17 @@
         https://logging.readthedocs.io/en/latest/functions/Write-Log.md
 
     .LINK
-        https://github.com/EsOsO/Logging/blob/master/Logging/public/Set-LoggingCustomTarget.ps1
+        https://github.com/EsOsO/Logging/blob/master/Logging/public/Set-LogCustomTarget.ps1
 #>
-function Set-LoggingCustomTarget {
-    [CmdletBinding(HelpUri='https://logging.readthedocs.io/en/latest/functions/Set-LoggingCustomTarget.md')]
+function Set-LogCustomTarget {
+    [CmdletBinding(HelpUri='https://logging.readthedocs.io/en/latest/functions/Set-LogCustomTarget.md')]
     param(
         [Parameter(Mandatory)]
         [ValidateScript({Test-Path -Path $_ -PathType Container})]
         [string] $Path
     )
 
-    Write-Verbose 'Stopping Logging Manager'
-    Stop-LoggingManager
-
     $Script:Logging.CustomTargets = $Path
 
-    Write-Verbose 'Starting Logging Manager'
-    Start-LoggingManager
+    Initialize-LogTarget
 }

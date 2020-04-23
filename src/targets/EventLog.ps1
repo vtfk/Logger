@@ -1,15 +1,19 @@
 @{
-    Name = 'WinEventLog'
+    Name = 'EventLog'
     Configuration = @{
         LogName  = @{Required = $true; Type = [string]; Default = $null}
         Source   = @{Required = $true; Type = [string]; Default = $null}
-        Level    = @{Required = $false; Type = [string]; Default = $Logging.Level}
     }
     Logger = {
         param(
             [hashtable] $Log,
             [hashtable] $Configuration
         )
+
+        if ($Log.Verbose)
+        {
+            $VerbosePreference = "Continue"
+        }
 
         $Params = @{
             EventId = 0
