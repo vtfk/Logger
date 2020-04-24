@@ -32,7 +32,7 @@ try {
 }
 ```
 
-For more examples, please take a quick look at [Example.ps1](https://github.com/vtfk/Logging/blob/master/Example.ps1) or head over to [EsOsO/Logging's wiki](https://github.com/EsOsO/Logging/wiki).
+For more examples, please take a quick look at [example.ps1](https://github.com/vtfk/Logging/blob/master/Example.ps1) or head over to [EsOsO/Logging's wiki](https://github.com/EsOsO/Logging/wiki).
 
 
 ## Log targets
