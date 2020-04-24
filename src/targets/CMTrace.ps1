@@ -27,7 +27,13 @@
         $Program = $Log.filename
         $Message = $Log.message
         $Thread = $Log.pid
-        $Severity = $Log.levelno - 1 # 1 = Info, 2 = Warning, 3 = Error
+
+        switch ($Log.LevelNo)
+        {
+            {$_ -ge 40}                { $Severity = 3 }
+            {$_ -ge 30 -and $_ -lt 40} { $Severity = 2 }
+            {$_ -lt 30}                { $Severity = 1 }
+        }
 
         if($Log.level -notmatch "INFO|WARNING|ERROR")
         {
