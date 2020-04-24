@@ -32,27 +32,39 @@ DynamicParam{
 }
 #>
 
-function New-LogDynamicParam {
+function New-LogDynamicParam
+{
     [OutputType([System.Management.Automation.RuntimeDefinedParameterDictionary])]
     [CmdletBinding(DefaultParameterSetName = "DynamicTarget")]
     param(
         [Parameter(Mandatory = $true, ParameterSetName = "DynamicLevel")]
         [Parameter(Mandatory = $true, ParameterSetName = "DynamicTarget")]
-        [String]
-        $Name,
+        [String]$Name,
+
         [Parameter(Mandatory = $true, ParameterSetName = "DynamicLevel")]
-        [switch]
-        $Level,
+        [switch]$Level,
+
         [Parameter(Mandatory = $true, ParameterSetName = "DynamicTarget")]
-        [switch]
-        $Target,
-        [boolean]
-        $Mandatory = $true,
-        [System.Management.Automation.RuntimeDefinedParameterDictionary]
-        $DynamicParams
+        [switch]$Target,
+
+        [Parameter()]
+        [boolean]$Mandatory = $true,
+
+        [Parameter()]
+        [Int]$Position = 1,
+
+        [Parameter()]
+        [Switch]$ValueFromPipeline,
+
+        [Parameter()]
+        [Switch]$ValueFromPipelineByPropertyName,
+
+        [Parameter()]
+        [System.Management.Automation.RuntimeDefinedParameterDictionary]$DynamicParams
     )
 
-    if (!$DynamicParams) {
+    if (!$DynamicParams)
+    {
         $DynamicParams = [System.Management.Automation.RuntimeDefinedParameterDictionary]::new()
     }
 
@@ -61,15 +73,18 @@ function New-LogDynamicParam {
 
     $attribute.ParameterSetName = '__AllParameterSets'
     $attribute.Mandatory = $Mandatory
-    $attribute.Position = 1
+    $attribute.Position = $Position
+    $attribute.ValueFromPipeline = $ValueFromPipeline -or $ValueFromPipelineByPropertyName
+    $attribute.ValueFromPipelineByPropertyName = $ValueFromPipelineByPropertyName
 
     $attributeCollection.Add($attribute)
 
 
     [String[]] $allowedValues = @()
 
-    switch ($PSCmdlet.ParameterSetName) {
-        "DynamicTarget" {
+    switch ($PSCmdlet.ParameterSetName)
+    {
+        "DynamicTarget"{
             $allowedValues += $Script:Logging.Targets.Keys
         }
         "DynamicLevel" {
