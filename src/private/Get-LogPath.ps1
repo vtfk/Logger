@@ -4,8 +4,8 @@
         [Parameter(Mandatory = $True)]
         [string]$CallingScriptPath,
 
-        [Parameter(Mandatory = $True)]
-        $Config,
+        [Parameter()]
+        $Path = "",
 
         [Parameter()]
         [string]$FileExtension = ".log"
@@ -30,27 +30,27 @@
     # make project path from calling script
     $logPath = $callingScriptFolder.Replace($SCRIPT_DIR, $LOG_DIR)
 
-    # fix $Config.Path
-    if ([string]::IsNullOrEmpty($Config.Path))
+    # fix $Path
+    if ([string]::IsNullOrEmpty($Path))
     {
         # get calling script name
         $callingScriptName = [System.IO.Path]::GetFileNameWithoutExtension($callingScriptPath)
 
         # add Path to Config
-        $Config.Path = "$logPath\$callingScriptName$($FileExtension)"
+        $Path = "$logPath\$callingScriptName$($FileExtension)"
     }
     else
     {
         # Remove FileExtension if one is in the configured path
-        if([System.IO.Path]::GetExtension($Config.Path)) 
+        if([System.IO.Path]::GetExtension($Path)) 
         {
             $FileExtension = "" 
         }
 
-        if($Config.Path.StartsWith($logPath)) {
-            $Config.Path = "$($Config.Path)$($FileExtension)"
+        if($Path.StartsWith($logPath)) {
+            $Path = "$($Path)$($FileExtension)"
         } else {
-            $Config.Path = "$logPath\$($Config.Path)$($FileExtension)"
+            $Path = "$logPath\$($Path)$($FileExtension)"
         }
     }
 
@@ -60,5 +60,5 @@
         New-Item -Path $logPath -ItemType Directory -Force -Confirm:$false | Out-Null
     }
 
-    return $Config.Path
+    return $Path
 }
