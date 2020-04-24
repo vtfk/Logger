@@ -12,7 +12,8 @@
     .LINK
         https://github.com/EsOsO/Logging/blob/master/Logging/public/Get-LogAvailableTarget.ps1
 #>
-function Get-LogAvailableTarget {
+function Get-LogAvailableTarget
+{
     [CmdletBinding(HelpUri='https://logging.readthedocs.io/en/latest/functions/Get-LogAvailableTarget.md')]
     param()
 

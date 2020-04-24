@@ -33,6 +33,9 @@
 
     .EXAMPLE
         PS C:\> Write-Log -Level ERROR -Message 'Hello, {0}!' -Arguments 'World' -Body @{Server='srv01.contoso.com'}
+    
+    .EXAMPLE
+        PS C:\> Write-Log -Level ERROR -Message 'Hello, {0}!' -Arguments 'World' -Body @{Server='srv01.contoso.com'} -Exception ('$_' exception variable from catch block)
 
     .LINK
         https://logging.readthedocs.io/en/latest/functions/Write-Log.md
@@ -43,32 +46,34 @@
     .LINK
         https://github.com/EsOsO/Logging/blob/master/Logging/public/Write-Log.ps1
 #>
-Function Write-Log {
+Function Write-Log
+{
     [CmdletBinding()]
     param(
-        [Parameter(Position = 2,
-            Mandatory = $true)]
-        [string] $Message,
-        [Parameter(Position = 3,
-            Mandatory = $false)]
-        [array] $Arguments,
-        [Parameter(Position = 4,
-            Mandatory = $false)]
-        [object] $Body = $null,
-        [Parameter(Position = 5,
-            Mandatory = $false)]
-        [System.Management.Automation.ErrorRecord] $Exception = $null
+        [Parameter(Mandatory = $true, Position = 1, ValueFromPipeline = $True)]
+        [string]$Message,
+
+        [Parameter(Mandatory = $false)]
+        [array]$Arguments,
+        
+        [Parameter(Mandatory = $false)]
+        [object]$Body = $null,
+        
+        [Parameter(Mandatory = $false)]
+        [System.Management.Automation.ErrorRecord]$Exception = $null
     )
 
     DynamicParam {
-        New-LogDynamicParam -Level -Mandatory $false -Name "Level"
-        $PSBoundParameters["Level"] = "INFO"
+        New-LogDynamicParam -Level -Mandatory $false -Name "Level" -Position 2
+        $PSBoundParameters["Level"] = $Script:Logging.Level
     }
 
-    End {
+    End
+    {
         [string] $messageText = $Message
 
-        if ($PSBoundParameters.ContainsKey('Arguments')) {
+        if ($PSBoundParameters.ContainsKey('Arguments'))
+        {
             $messageText = $messageText -f $Arguments
         }
 
@@ -77,7 +82,8 @@ Function Write-Log {
 
         # Split-Path throws an exception if called with a -Path that is null or empty.
         [string] $fileName = [string]::Empty
-        if (-not [string]::IsNullOrEmpty($invocationInfo.ScriptName)) {
+        if (-not [string]::IsNullOrEmpty($invocationInfo.ScriptName))
+        {
             $fileName = Split-Path -Path $invocationInfo.ScriptName -Leaf
         }
 
@@ -96,8 +102,10 @@ Function Write-Log {
             pid          = $PID
         }
 
-        if ($Script:Logging.EnabledTargets) {
-            try {
+        if ($Script:Logging.EnabledTargets)
+        {
+            try
+            {
                 #Enumerating through a collection is intrinsically not a thread-safe procedure
                 for ($targetEnum = $Script:Logging.EnabledTargets.GetEnumerator(); $targetEnum.MoveNext(); ) {
                     [string] $LoggingTarget = $targetEnum.Current.key
@@ -111,7 +119,8 @@ Function Write-Log {
                     }
                 }
             }
-            catch {
+            catch
+            {
                 Write-Error $_
             }
         }

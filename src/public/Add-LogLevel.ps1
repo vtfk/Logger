@@ -32,23 +32,30 @@
     .LINK
         https://github.com/EsOsO/Logging/blob/master/Logging/public/Add-LogLevel.ps1
 #>
-function Add-LogLevel {
+function Add-LogLevel
+{
     [CmdletBinding(HelpUri='https://logging.readthedocs.io/en/latest/functions/Add-LogLevel.md')]
     param(
-        [Parameter(Mandatory)]
-        [int] $Level,
-        [Parameter(Mandatory)]
-        [string] $LevelName
+        [Parameter(Mandatory = $True)]
+        [int]$Level,
+        
+        [Parameter(Mandatory = $True)]
+        [string]$LevelName
     )
 
-    if ($Level -notin $LevelNames.Keys -and $LevelName -notin $LevelNames.Keys) {
+    if ($Level -notin $LevelNames.Keys -and $LevelName -notin $LevelNames.Keys)
+    {
         $LevelNames[$Level] = $LevelName.ToUpper()
         $LevelNames[$LevelName] = $Level
-    } elseif ($Level -in $LevelNames.Keys -and $LevelName -notin $LevelNames.Keys) {
+    }
+    elseif ($Level -in $LevelNames.Keys -and $LevelName -notin $LevelNames.Keys)
+    {
         $LevelNames.Remove($LevelNames[$Level]) | Out-Null
         $LevelNames[$Level] = $LevelName.ToUpper()
         $LevelNames[$LevelNames[$Level]] = $Level
-    } elseif ($Level -notin $LevelNames.Keys -and $LevelName -in $LevelNames.Keys) {
+    }
+    elseif ($Level -notin $LevelNames.Keys -and $LevelName -in $LevelNames.Keys)
+    {
         $LevelNames.Remove($LevelNames[$LevelName]) | Out-Null
         $LevelNames[$LevelName] = $Level
     }

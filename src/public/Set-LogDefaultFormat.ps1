@@ -28,24 +28,30 @@
     .LINK
         https://github.com/EsOsO/Logging/blob/master/Logging/public/Set-LogDefaultFormat.ps1
 #>
-function Set-LogDefaultFormat {
+function Set-LogDefaultFormat
+{
     [CmdletBinding(HelpUri='https://logging.readthedocs.io/en/latest/functions/Set-LogDefaultFormat.md')]
     param(
-        [string] $Format = $Defaults.Format
+        [Parameter()]
+        [string]$Format = $Defaults.Format
     )
 
     $Script:Logging.Format = $Format
 
     # Setting format on already configured targets
-    foreach ($Target in $Script:Logging.EnabledTargets.Values) {
-        if ($Target.ContainsKey('Format')) {
+    foreach ($Target in $Script:Logging.EnabledTargets.Values)
+    {
+        if ($Target.ContainsKey('Format'))
+        {
             $Target['Format'] = $Script:Logging.Format
         }
     }
 
     # Setting format on available targets
-    foreach ($Target in $Script:Logging.Targets.Values) {
-        if ($Target.Defaults.ContainsKey('Format')) {
+    foreach ($Target in $Script:Logging.Targets.Values)
+    {
+        if ($Target.Defaults.ContainsKey('Format'))
+        {
             $Target.Defaults.Format.Default = $Script:Logging.Format
         }
     }

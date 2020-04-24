@@ -24,7 +24,8 @@
     .LINK
         https://github.com/EsOsO/Logging/blob/master/Logging/public/Set-LogDefaultLevel.ps1
 #>
-function Set-LogDefaultLevel {
+function Set-LogDefaultLevel
+{
     [CmdletBinding(HelpUri = 'https://logging.readthedocs.io/en/latest/functions/Set-LogDefaultLevel.md')]
     param()
 
@@ -32,20 +33,25 @@ function Set-LogDefaultLevel {
         New-LogDynamicParam -Name "Level" -Level
     }
 
-    End {
+    End
+    {
         $Script:Logging.Level = $PSBoundParameters.Level
         $Script:Logging.LevelNo = Get-LevelNumber -Level $PSBoundParameters.Level
 
         # Setting level on already configured targets
-        foreach ($Target in $Script:Logging.EnabledTargets.Values) {
-            if ($Target.ContainsKey('Level')) {
+        foreach ($Target in $Script:Logging.EnabledTargets.Values)
+        {
+            if ($Target.ContainsKey('Level'))
+            {
                 $Target['Level'] = $Script:Logging.Level
             }
         }
 
         # Setting level on available targets
-        foreach ($Target in $Script:Logging.Targets.Values) {
-            if ($Target.Defaults.ContainsKey('Level')) {
+        foreach ($Target in $Script:Logging.Targets.Values)
+        {
+            if ($Target.Defaults.ContainsKey('Level'))
+            {
                 $Target.Defaults.Level.Default = $Script:Logging.Level
             }
         }

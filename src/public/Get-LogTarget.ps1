@@ -16,13 +16,16 @@
     .LINK
         https://github.com/EsOsO/Logging/blob/master/Logging/public/Get-LogTarget.ps1
 #>
-function Get-LogTarget {
+function Get-LogTarget
+{
     [CmdletBinding(HelpUri = 'https://logging.readthedocs.io/en/latest/functions/Get-LogTarget.md')]
     param(
-        [string] $Name = $null
+        [Parameter()]
+        [string]$Name = $null
     )
 
-    if ($PSBoundParameters.Name) {
+    if ($PSBoundParameters.Name)
+    {
         return $Script:Logging.EnabledTargets[$Name]
     }
 

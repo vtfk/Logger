@@ -24,12 +24,13 @@
     .LINK
         https://github.com/EsOsO/Logging/blob/master/Logging/public/Set-LogCustomTarget.ps1
 #>
-function Set-LogCustomTarget {
+function Set-LogCustomTarget
+{
     [CmdletBinding(HelpUri='https://logging.readthedocs.io/en/latest/functions/Set-LogCustomTarget.md')]
     param(
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory = $True)]
         [ValidateScript({Test-Path -Path $_ -PathType Container})]
-        [string] $Path
+        [string]$Path
     )
 
     $Script:Logging.CustomTargets = $Path

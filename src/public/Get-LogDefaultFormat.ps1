@@ -14,7 +14,8 @@
     .LINK
         https://github.com/EsOsO/Logging/blob/master/Logging/public/Get-LogDefaultFormat.ps1
 #>
-function Get-LogDefaultFormat {
+function Get-LogDefaultFormat
+{
     [CmdletBinding()]
     param()
 

@@ -17,7 +17,8 @@
     .LINK
         https://github.com/EsOsO/Logging/blob/master/Logging/public/Get-LogDefaultLevel.ps1
 #>
-function Get-LogDefaultLevel {
+function Get-LogDefaultLevel
+{
     [CmdletBinding(HelpUri = 'https://logging.readthedocs.io/en/latest/functions/Get-LogDefaultLevel.md')]
     param()
 

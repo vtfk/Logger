@@ -1,4 +1,5 @@
-Function Get-LevelsName {
+Function Get-LevelsName
+{
     [CmdletBinding()]
     param()
 

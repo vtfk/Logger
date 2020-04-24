@@ -1,9 +1,13 @@
-function Replace-Token {
+function Replace-Token
+{
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '')]
     [CmdletBinding()]
     param(
-        [string] $String,
-        [object] $Source
+        [Parameter()]
+        [string]$String,
+
+        [Parameter()]
+        [object]$Source
     )
 
     foreach($key in $Source.Keys)

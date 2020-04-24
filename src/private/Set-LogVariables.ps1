@@ -1,7 +1,9 @@
-function Set-LogVariables {
+function Set-LogVariables
+{
 
     #Already setup
-    if ($Script:Logging -and $Script:LevelNames) {
+    if ($Script:Logging -and $Script:LevelNames)
+    {
         return
     }
 

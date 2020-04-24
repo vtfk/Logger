@@ -1,14 +1,17 @@
-function Initialize-LogTarget {
+function Initialize-LogTarget
+{
     param()
 
     $targets = @()
     $targets += Get-ChildItem "$ScriptRoot\targets" -Filter '*.ps1'
 
-    if ((![String]::IsNullOrWhiteSpace($Script:Logging.CustomTargets)) -and (Test-Path -Path $Script:Logging.CustomTargets -PathType Container)) {
+    if ((![String]::IsNullOrWhiteSpace($Script:Logging.CustomTargets)) -and (Test-Path -Path $Script:Logging.CustomTargets -PathType Container))
+    {
         $targets += Get-ChildItem -Path $Script:Logging.CustomTargets -Filter '*.ps1'
     }
 
-    foreach ($target in $targets) {
+    foreach ($target in $targets)
+    {
         $module = . $target.FullName
         $Script:Logging.Targets[$module.Name] = @{
             Init           = $module.Init
