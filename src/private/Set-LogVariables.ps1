@@ -46,7 +46,7 @@ function Set-LogVariables
         Format         = $Defaults.Format
         CallerScope    = $Defaults.CallerScope
         CustomTargets  = [String]::Empty
-        Targets        = ([System.Collections.Concurrent.ConcurrentDictionary[string, hashtable]]::new())
-        EnabledTargets = ([System.Collections.Concurrent.ConcurrentDictionary[string, hashtable]]::new())
+        Targets        = ([System.Collections.Concurrent.ConcurrentDictionary[string, hashtable]]::new([System.StringComparer]::InvariantCultureIgnoreCase))
+        EnabledTargets = ([System.Collections.Concurrent.ConcurrentDictionary[string, hashtable]]::new([System.StringComparer]::InvariantCultureIgnoreCase))
     }))
 }
