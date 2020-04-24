@@ -20,21 +20,25 @@
     .LINK
         https://github.com/EsOsO/Logging/blob/master/Logging/public/Add-LogTarget.ps1
 #>
-function Add-LogTarget {
+function Add-LogTarget
+{
     [CmdletBinding(HelpUri='https://logging.readthedocs.io/en/latest/functions/Add-LogTarget.md')]
     param(
         [Parameter(Position = 2)]
-        [hashtable] $Configuration = @{}
+        [Alias("Config","Conf","Cfg","C")]
+        [hashtable]$Configuration = @{}
     )
 
     DynamicParam {
         New-LogDynamicParam -Name 'Name' -Target
     }
 
-    End {
+    End
+    {
         $Script:Logging.EnabledTargets[$PSBoundParameters.Name] = Merge-DefaultConfig -Target $PSBoundParameters.Name -Configuration $Configuration
 
-        if ($Script:Logging.EnabledTargets[$PSBoundParameters.Name].Init -is [scriptblock]) {
+        if ($Script:Logging.EnabledTargets[$PSBoundParameters.Name].Init -is [scriptblock])
+        {
             & $Script:Logging.EnabledTargets[$PSBoundParameters.Name].Init $Configuration
         }
     }
