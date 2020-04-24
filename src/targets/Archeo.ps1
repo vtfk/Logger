@@ -35,14 +35,11 @@
             $body[0].Add('bodyContent', $fileContentAsEncodedText)
         }
 
-        #region Parameter presets (must reflect settings from Archeo) #####
+        #region Parameter validation presets
 
-        $transactionTypes = @("Overføringsbrev", "Test")
         $transactionTagCharsNotAllowed = "æ|ø|å|§|¤|£|\\|¨|'"
         $transactionTagMaxLength = 230
-        $messageTypes = @("MessageTest1", "MessageTest2")
         $descriptionMaxLength = 128
-        $statusTypes = @("Error", "Started", "Success")
 
         #endregion
 
@@ -59,10 +56,6 @@
         {
             throw "TransactionType is not valid"
         }
-        if ($Configuration.TransactionType -notin $transactionTypes)
-        {
-            throw "TransactionType '$($Configuration.TransactionType)' not valid. Valid transaction types are: `"$($transactionTypes -join '","')`""
-        }
 
         # TransactionTag
         if ([string]::IsNullOrEmpty($Configuration.TransactionTag))
@@ -75,17 +68,13 @@
         }
         if ($Configuration.TransactionTag.Length -lt 1 -or $Configuration.TransactionTag.Length -gt $transactionTagMaxLength)
         {
-            throw "TransactionTag '$($Configuration.TransactionTag)' not valid. Too many characters. Max (recommended) length is $transactionTagMaxLength"
+            throw "TransactionTag '$($Configuration.TransactionTag)' not valid. Too few or too many characters. Current length is $($Configuration.TransactionTag.Length). Max (recommended) length is $transactionTagMaxLength"
         }
 
         # MessageType
         if ([string]::IsNullOrEmpty($Log.Body.MessageType))
         {
             throw "MessageType not provided in Body"
-        }
-        if ($Log.Body.MessageType -notin $messageTypes)
-        {
-            throw "MessageType '$($Log.Body.MessageType)' not valid. Valid message types are: `"$($messageTypes -join '","')`""
         }
 
         # Description ($Log.Message)
@@ -95,22 +84,13 @@
         }
         if ($Log.Message.Length -lt 1 -or $Log.Message.Length -gt $descriptionMaxLength)
         {
-            throw "Message '$($Log.Message)' not valid. Too many characters. Max length is $descriptionMaxLength"
+            throw "Message '$($Log.Message)' not valid. Too few or too many characters. Current length is $($Log.Message.Length). Max length is $descriptionMaxLength"
         }
-        <# Description
-        if ($Configuration.Description.Length -lt 1 -or $Configuration.Description.Length -gt $descriptionMaxLength)
-        {
-            throw "Description '$($Configuration.Description)' not valid. Too many characters. Max length is $descriptionMaxLength"
-        }#>
 
         # Status
         if ([string]::IsNullOrEmpty($Log.Body.Status))
         {
             throw "Status not provided in Body"
-        }
-        if ($Log.Body.Status -notin $statusTypes)
-        {
-            throw "Status '$($Log.Body.Status)' not valid. Valid status types are: `"$($statusTypes -join '","')`""
         }
 
         # FilePath
