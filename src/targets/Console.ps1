@@ -5,7 +5,7 @@
         Level        = @{Required = $false; Type = [string];    Default = $Logging.Level}
         Format       = @{Required = $false; Type = [string];    Default = $Logging.Format}
         ColorMapping = @{Required = $false; Type = [hashtable]; Default = @{
-                                                                    'DEBUG'   = 'Grey'
+                                                                    'DEBUG'   = 'Gray'
                                                                     'INFO'    = 'Cyan'
                                                                     'WARNING' = 'Yellow'
                                                                     'ERROR'   = 'Red'
