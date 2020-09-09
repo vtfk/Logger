@@ -55,9 +55,10 @@
     }
 
     # make sure $logPath exists
-    if (!(Test-Path -Path $logPath))
+    $outFolder = [System.IO.Path]::GetDirectoryName($Path)
+    if (!(Test-Path -Path $outFolder))
     {
-        New-Item -Path $logPath -ItemType Directory -Force -Confirm:$false | Out-Null
+        New-Item -Path $outFolder -ItemType Directory -Force -Confirm:$false | Out-Null
     }
 
     return $Path
