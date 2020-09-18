@@ -45,7 +45,7 @@
         }
 
         # get log path (and create it if blabla.....)
-        $Configuration.Path = Get-LogPath -CallingScriptPath $Log.pathname -Path $Configuration.Path
+        $Configuration.Path = Get-LogPath -CallingScriptPath $Log.pathname -Path $Configuration.Path -CallerShortcut $Script:Logging.CallerShortcut
 
         $Text = "$(Replace-Token -String $Configuration.Format -Source $Log) $Text"
 

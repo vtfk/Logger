@@ -30,6 +30,9 @@ try {
 } catch {
   Write-Log "Something failed! :(" -Level ERROR -Exception $_
 }
+
+# will replace shortcut (%1) with the actual name of the calling script
+Add-LogTarget -Name CMtrace -Configuration @{ Path = "%1_Test.log" }
 ```
 
 For more examples, please take a quick look at [example.ps1](https://github.com/vtfk/Logger/blob/master/Example.ps1) or head over to [EsOsO/Logging's wiki](https://github.com/EsOsO/Logging/wiki).

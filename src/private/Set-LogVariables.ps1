@@ -33,11 +33,12 @@ function Set-LogVariables
 
     New-Variable -Name ScriptRoot           -Scope Script -Option ReadOnly -Value ([System.IO.Path]::GetDirectoryName($MyInvocation.MyCommand.Module.Path))
     New-Variable -Name Defaults             -Scope Script -Option ReadOnly -Value @{
-        Level       = 'INFO'
-        LevelNo     = $LevelNames['INFO']
-        Format      = '[%timestamp%] [%level%] - %message%'
-        Timestamp   = 'dd.MM.yyyy HH:mm:ss'
-        CallerScope = 1
+        Level           = 'INFO'
+        LevelNo         = $LevelNames['INFO']
+        Format          = '[%timestamp%] [%level%] - %message%'
+        Timestamp       = 'dd.MM.yyyy HH:mm:ss'
+        CallerScope     = 1
+        CallerShortcut  = '%1'
     }
 
     New-Variable -Name Logging              -Scope Script -Option ReadOnly -Value ([hashtable]::Synchronized(@{
@@ -45,6 +46,7 @@ function Set-LogVariables
         LevelNo        = $Defaults.LevelNo
         Format         = $Defaults.Format
         CallerScope    = $Defaults.CallerScope
+        CallerShortcut = $Defaults.CallerShortcut
         CustomTargets  = [String]::Empty
         Targets        = ([System.Collections.Concurrent.ConcurrentDictionary[string, hashtable]]::new([System.StringComparer]::InvariantCultureIgnoreCase))
         EnabledTargets = ([System.Collections.Concurrent.ConcurrentDictionary[string, hashtable]]::new([System.StringComparer]::InvariantCultureIgnoreCase))

@@ -19,7 +19,7 @@
         }
 
         # get log path (and create it if blabla.....)
-        $Configuration.Path = Get-LogPath -CallingScriptPath $Log.pathname -Path $Configuration.Path
+        $Configuration.Path = Get-LogPath -CallingScriptPath $Log.pathname -Path $Configuration.Path -CallerShortcut $Script:Logging.CallerShortcut
 
         # Define CMTrace message fields
         $Component = $Log.caller

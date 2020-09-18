@@ -8,17 +8,21 @@
         $Path = "",
 
         [Parameter()]
-        [string]$FileExtension = ".log"
+        [string]$FileExtension = ".log",
+
+        [Parameter()]
+        $CallerShortcut
     )
 
     $FileExtension = ".$($FileExtension.TrimStart("."))"
 
+    # get calling script folder path
     $callingScriptFolder = Split-Path -Path $callingScriptPath -Parent
 
     if (!$callingScriptPath -or !$callingScriptPath.StartsWith($SCRIPT_DIR))
     {
         # if script is saved somewhere it's not supposed to....
-        throw "Du må lagre fila i en undermappe i '$SCRIPT_DIR' først"
+        throw "Script must be saved in a subfolder in '$SCRIPT_DIR' first"
     }
 
     # if callingScriptFolder equals $SCRIPT_DIR, throw error
@@ -27,15 +31,15 @@
         throw "Running script '$callingScriptPath' must be nested in a project name (folder) under '$SCRIPT_DIR'."
     }
 
+    # get calling script name
+    $callingScriptName = [System.IO.Path]::GetFileNameWithoutExtension($callingScriptPath)
+
     # make project path from calling script
     $logPath = $callingScriptFolder.Replace($SCRIPT_DIR, $LOG_DIR)
 
     # fix $Path
     if ([string]::IsNullOrEmpty($Path))
     {
-        # get calling script name
-        $callingScriptName = [System.IO.Path]::GetFileNameWithoutExtension($callingScriptPath)
-
         # add Path to Config
         $Path = "$logPath\$callingScriptName$($FileExtension)"
     }
@@ -44,7 +48,7 @@
         # Remove FileExtension if one is in the configured path
         if([System.IO.Path]::GetExtension($Path)) 
         {
-            $FileExtension = "" 
+            $FileExtension = ""
         }
 
         if($Path.StartsWith($logPath)) {
@@ -52,6 +56,9 @@
         } else {
             $Path = "$logPath\$($Path)$($FileExtension)"
         }
+
+        # replace $CallerShortcut with $callingScriptName
+        $Path = $Path.Replace($CallerShortcut, $callingScriptName)
     }
 
     # make sure $logPath exists
