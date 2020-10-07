@@ -44,18 +44,25 @@
             }
         }
 
-        # get log path (and create it if blabla.....)
-        $Configuration.Path = Get-LogPath -CallingScriptPath $Log.pathname -Path $Configuration.Path -CallerShortcut $Script:Logging.CallerShortcut
-
+        # construct log text
         $Text = "$(Replace-Token -String $Configuration.Format -Source $Log) $Text"
 
-        $Params = @{
-            Append      = $Configuration.Append
-            FilePath    = Replace-Token -String $Configuration.Path -Source $Log
-            Encoding    = $Configuration.Encoding
-        }
+        # pathname (ScriptName) must exist for logging to work
+        if ($Log.pathname) {
+            # get log path (and create it if blabla.....)
+            $Configuration.Path = Get-LogPath -CallingScriptPath $Log.pathname -Path $Configuration.Path -CallerShortcut $Script:Logging.CallerShortcut
 
-        Write-Verbose "[Logger/File] Logging to: $($Params.FilePath)"
-        $Text | Out-File @Params
+            $Params = @{
+                Append      = $Configuration.Append
+                FilePath    = Replace-Token -String $Configuration.Path -Source $Log
+                Encoding    = $Configuration.Encoding
+            }
+
+            Write-Verbose "[Logger/File] Logging to: $($Params.FilePath)"
+            $Text | Out-File @Params
+        }
+        else {
+            Write-Warning "$Text :: Filepath not found (CallStack lacks necessary info)"
+        }
     }
 }

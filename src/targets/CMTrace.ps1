@@ -18,13 +18,16 @@
             $VerbosePreference = "Continue"
         }
 
-        # get log path (and create it if blabla.....)
-        $Configuration.Path = Get-LogPath -CallingScriptPath $Log.pathname -Path $Configuration.Path -CallerShortcut $Script:Logging.CallerShortcut
+        # pathname (ScriptName) must exist for logging to work
+        if ($Log.pathname) {
+            # get log path (and create it if blabla.....)
+            $Configuration.Path = Get-LogPath -CallingScriptPath $Log.pathname -Path $Configuration.Path -CallerShortcut $Script:Logging.CallerShortcut
+        }
 
         # Define CMTrace message fields
-        $Component = $Log.caller
+        if ($Log.caller) { $Component = $Log.caller } else { $Component = "" }
+        if ($Log.filename) { $Program = $Log.filename } else { $Program = "" }
         $ComponentLineNumber = $Log.linenumber
-        $Program = $Log.filename
         $Message = $Log.message
         $Thread = $Log.pid
 
@@ -81,16 +84,23 @@
             $Component = "LineNumber: $ComponentLineNumber"
         }
 
-        # construct cmtrace log format and output to logfile
+        # construct cmtrace log format
         $Text = "<![LOG[$Message]LOG]!><time=`"$date1+$($timeZoneBias.bias)`" date=`"$date2`" component=`"$Component`" context=`"`" type=`"$Severity`" thread=`"$Thread`" file=`"$Program`">"
 
-        $Params = @{
-            Append      = $Configuration.Append
-            FilePath    = Replace-Token -String $Configuration.Path -Source $Log
-            Encoding    = $Configuration.Encoding
-        }
+        # pathname (ScriptName) must exist for logging to work
+        if ($Log.pathname) {
+            $Params = @{
+                Append      = $Configuration.Append
+                FilePath    = Replace-Token -String $Configuration.Path -Source $Log
+                Encoding    = $Configuration.Encoding
+            }
 
-        Write-Verbose "[Logger/CMTrace] Logging to: $($Params.FilePath)"
-        $Text | Out-File @Params
+            # output to logfile
+            Write-Verbose "[Logger/CMTrace] Logging to: $($Params.FilePath)"
+            $Text | Out-File @Params
+        }
+        else {
+            Write-Warning "$Text :: Filepath not found (CallStack lacks necessary info)"
+        }
     }
 }
