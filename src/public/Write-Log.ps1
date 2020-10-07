@@ -92,13 +92,13 @@ Function Write-Log
             timestamputc = Get-Date ([datetime]::UtcNow) -Format $Defaults.Timestamp
             level        = Get-LevelName -Level $levelNumber
             levelno      = $levelNumber
-            lineno       = $invocationInfo.ScriptLineNumber
+            #lineno       = $invocationInfo.ScriptLineNumber
             pathname     = $invocationInfo.ScriptName
             filename     = $fileName
             caller       = $invocationInfo.Command
             message      = $messageText
             body         = $Body
-            exception     = $Exception
+            exception    = $Exception
             pid          = $PID
         }
 
