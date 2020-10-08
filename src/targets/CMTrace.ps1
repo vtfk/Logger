@@ -18,12 +18,6 @@
             $VerbosePreference = "Continue"
         }
 
-        # pathname (ScriptName) must exist for logging to work
-        if ($Log.pathname) {
-            # get log path (and create it if blabla.....)
-            $Configuration.Path = Get-LogPath -CallingScriptPath $Log.pathname -Path $Configuration.Path -CallerShortcut $Script:Logging.CallerShortcut
-        }
-
         # Define CMTrace message fields
         if ($Log.caller) { $Component = $Log.caller } else { $Component = "" }
         if ($Log.filename) { $Program = $Log.filename } else { $Program = "" }
@@ -89,6 +83,9 @@
 
         # pathname (ScriptName) must exist for logging to work
         if ($Log.pathname) {
+            # get log path (and create it if blabla.....)
+            $Configuration.Path = Get-LogPath -CallingScriptPath $Log.pathname -Path $Configuration.Path -CallerShortcut $Script:Logging.CallerShortcut
+            
             $Params = @{
                 Append      = $Configuration.Append
                 FilePath    = Replace-Token -String $Configuration.Path -Source $Log
