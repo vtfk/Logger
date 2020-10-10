@@ -8,6 +8,15 @@ If you want to log asynchronous, please use the original version over at [EsOsO/
 
 ## Installation
 
+### System Environment Variables
+
+Create two variables:
+
+1. SCRIPT_DIR = **Path-to-folder-containing-all-script-repos**
+1. LOG_DIR = **Path-to-folder-containing-all-logging**
+
+### Source
+
 Clone this repository, and then import the folder using ``Import-Module $Path`` 
 
 ```bash

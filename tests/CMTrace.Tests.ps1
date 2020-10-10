@@ -1,5 +1,5 @@
 ﻿$there = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) "..\src"
-$logFile = ($MyInvocation.MyCommand.Path).Replace($SCRIPT_DIR, $LOG_DIR).Replace(".ps1", ".log")
+$logFile = ($MyInvocation.MyCommand.Path).Replace($env:SCRIPT_DIR, $env:LOG_DIR).Replace(".ps1", ".log")
 $sut = "Logger"
 $target = "CMTrace"
 
