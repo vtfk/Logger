@@ -67,7 +67,7 @@
     # NestedModules = @()
         
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = @('Add-LogLevel','Add-LogTarget','Get-LogAvailableTarget','Get-LogDefaultFormat','Get-LogDefaultLevel','Get-LogTarget','Set-LogCustomTarget','Set-LogDefaultFormat','Set-LogDefaultLevel','Write-Log','Wait-Logging')
+    FunctionsToExport = @('Add-LogLevel','Add-LogTarget','Get-LogAvailableTarget','Get-LogDefaultFormat','Get-LogDefaultLevel','Get-LogTarget','Set-LogCustomTarget','Set-LogDefaultFormat','Set-LogDefaultLevel','Write-Log')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport = ''
