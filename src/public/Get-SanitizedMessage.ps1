@@ -1,4 +1,19 @@
-﻿Function Get-SanitizedMessage
+﻿<#
+    .SYNOPSIS
+        Sanitize message for "Bank account numbers", "Credit card numbers" and "Social security numbers"
+    .DESCRIPTION
+        Sanitize message for "Bank account numbers", "Credit card numbers" and "Social security numbers"
+    .EXAMPLE
+        Get-SanitizedMessage -Message "This is my social security number (01234567891)"
+        Will sanitize message with * as masked character
+    .EXAMPLE
+        Get-SanitizedMessage -Message "This is my social security number (01234567891)" -Mask '%'
+        Will sanitize message with % as masked character
+    .EXAMPLE
+        Get-SanitizedMessage -Message "This is my social security number (01234567891)" -BankAccountNumber $False -CreditCardNumber $False
+        Will sanitize message (only for "Social security numbers") with * as masked character
+#>
+Function Get-SanitizedMessage
 {
     param(
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True)]
