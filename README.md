@@ -53,6 +53,14 @@ Almost all targets have the possibility to turn on sanitizing of log message.  S
 * Credit card numbers
 * Social security numbers
 
+```powershell
+Import-Module /path/to/cloned/repository
+
+Add-LogTarget -Name File -Configuration @{ Sanitize = $True }
+
+Write-Log -Message "Some message with social number: 01234567891"
+```
+
 **Sanitizing is only available for Norwegian info** - Pull requests for other types/languages are welcome.
 
 
