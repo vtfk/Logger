@@ -20,22 +20,22 @@
 
     $regexPatterns = @(
         @{
-            name = "bank account numbers"
+            name = "Bank account number"
             pattern = "(\d{4}) (\d{2}) (\d{5})"
             replacement = "$((1..4 | % { "$Mask" }) -join '') $((1..2 | % { $Mask }) -join '') $((1..2 | % { $Mask }) -join '')ddd"
         },
         @{
-            name = "credit card numbers (no spaces)"
+            name = "Credit card number (no spaces)"
             pattern = "\d{16}"
             replacement = "$((1..12 | % { $Mask }) -join '')dddd"
         },
         @{
-            name = "credit card numbers (with spaces)"
+            name = "Credit card number (with spaces)"
             pattern = "(\d{4}) (\d{4}) (\d{4}) (\d{4})"
             replacement = "$((1..4 | % { $Mask }) -join '') $((1..4 | % { $Mask }) -join '') $((1..4 | % { $Mask }) -join '') dddd"
         },
         @{
-            name = "social security number"
+            name = "Social security number"
             pattern = "\d{11}"
             replacement = "dddddd$((1..5 | % { $Mask }) -join '')"
         }
