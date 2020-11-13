@@ -15,6 +15,7 @@
 #>
 Function Get-SanitizedMessage
 {
+    [CmdletBinding()]
     param(
         [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True)]
         [string]$Message,
@@ -60,6 +61,7 @@ Function Get-SanitizedMessage
         if (($regexPattern.name -like "bank account*" -and !$BankAccountNumber) -or
             ($regexPattern.name -like "credit card*" -and !$CreditCardNumber) -or
             ($regexPattern.name -like "social*" -and !$SocialSecurityNumber)) {
+                Write-Verbose "Skipping '$($regexPattern.name)'"
             continue;
         }
 
@@ -82,14 +84,14 @@ Function Get-SanitizedMessage
                     if ($index -gt 0) {
                         $previousIndexChar = $Message[$previousIndex]
                         if ($previousIndexChar -match "[a-zæøå]|[A-ZÆØÅ]|[0-9]|['`"]") {
-                            #Write-Host "Match is inside another string. Skipping" -ForegroundColor Yellow
+                            Write-Verbose "Match is inside another string. Skipping"
                             continue matchesLoop;
                         }
 
                         if ($nextIndex -le $Message.Length) {
                             $nextIndexChar = $Message[$nextIndex]
                             if ($nextIndexChar -match "[a-zæøå]|[A-ZÆØÅ]|[0-9]|['`"]") {
-                                #Write-Host "Match is inside another string. Skipping" -ForegroundColor Yellow
+                                Write-Verbose "Match is inside another string. Skipping"
                                 continue matchesLoop;
                             }
                         }
