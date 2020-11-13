@@ -1,8 +1,10 @@
 @{
     Name = 'EventLog'
     Configuration = @{
-        LogName  = @{Required = $true; Type = [string]; Default = $null}
-        Source   = @{Required = $true; Type = [string]; Default = $null}
+        LogName      = @{Required = $true;  Type = [string]; Default = $null}
+        Source       = @{Required = $true;  Type = [string]; Default = $null}
+        Sanitize     = @{Required = $false; Type = [bool];   Default = $false}
+        SanitizeMask = @{Required = $false;  Type = [char];  Default = '*'}
     }
     Logger = {
         param(
@@ -29,7 +31,7 @@
             {$_ -lt 30}                { $Params['EntryType'] = 'Information' }
         }
 
-        $Params['Message'] = $Log.Message
+        $Params['Message'] = if ($Configuration.Sanitize) { Get-SanitizedMessage -Message $Log.Message -Mask $Configuration.SanitizeMask } else { $Log.Message }
 
         if ($Log.ExecInfo) {
             $ExceptionFormat = "{0}`n" +

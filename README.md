@@ -46,6 +46,15 @@ Add-LogTarget -Name CMtrace -Configuration @{ Path = "%1_Test.log" }
 
 For more examples, please take a quick look at [example.ps1](https://github.com/vtfk/Logger/blob/master/Example.ps1) or head over to [EsOsO/Logging's wiki](https://github.com/EsOsO/Logging/wiki).
 
+## Sanitizing log message
+
+Almost all targets have the possibility to turn on sanitizing of log message.  Sanitizing will mask up:
+* Bank account numbers
+* Credit card numbers
+* Social security numbers
+
+**Sanitizing is only available for Norwegian info** - Pull requests for other types/languages are welcome.
+
 
 ## Log targets
 | Log Target  | Description |

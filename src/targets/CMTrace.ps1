@@ -1,10 +1,12 @@
 ﻿@{
     Name = 'CMTrace'
     Configuration = @{
-        Path        = @{Required = $false;  Type = [string];    Default = $null}
-        Append      = @{Required = $false;  Type = [bool];      Default = $true}
-        Encoding    = @{Required = $false;  Type = [string];    Default = 'utf8'}
-        Level       = @{Required = $false;  Type = [string];    Default = $Logging.Level}
+        Path         = @{Required = $false;  Type = [string];    Default = $null}
+        Append       = @{Required = $false;  Type = [bool];      Default = $true}
+        Encoding     = @{Required = $false;  Type = [string];    Default = 'utf8'}
+        Level        = @{Required = $false;  Type = [string];    Default = $Logging.Level}
+        Sanitize     = @{Required = $false;  Type = [bool];      Default = $false}
+        SanitizeMask = @{Required = $false;  Type = [char];      Default = '*'}
     }
 
     Logger = {
@@ -23,6 +25,10 @@
         if ($Log.filename) { $Program = $Log.filename } else { $Program = "" }
         $ComponentLineNumber = $Log.linenumber
         $Message = $Log.message
+        if ($Configuration.Sanitize)
+        {
+            $Message = Get-SanitizedMessage -Message $Log.message -Mask $Configuration.SanitizeMask
+        }
         $Thread = $Log.pid
 
         switch ($Log.LevelNo)

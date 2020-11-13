@@ -1,15 +1,17 @@
 ﻿@{
     Name = 'Teams'
     Configuration = @{
-        WebHook     = @{Required = $true;  Type = [string]; Default = $null}
-        Level       = @{Required = $false; Type = [string]; Default = $Logging.Level}
-        Format      = @{Required = $false; Type = [string]; Default = "%message%"}
+        WebHook      = @{Required = $true;  Type = [string]; Default = $null}
+        Level        = @{Required = $false; Type = [string]; Default = $Logging.Level}
+        Format       = @{Required = $false; Type = [string]; Default = "%message%"}
         ColorMapping = @{Required = $false; Type = [hashtable]; Default = @{
                                                             'DEBUG'   = '999999'
                                                             'INFO'    = '0087ff'
                                                             'WARNING' = 'ffdd00'
                                                             'ERROR'   = 'ff0000'
                                                         }}
+        Sanitize     = @{Required = $false;  Type = [bool]; Default = $false}
+        SanitizeMask = @{Required = $false;  Type = [char]; Default = '#'}
     }
     Logger = {
         param(
@@ -22,11 +24,13 @@
             $VerbosePreference = "Continue"
         }
 
+        $textMsg = Replace-Token -String $Configuration.Format -Source $Log
+
         $Text = @{
             '@type' = "MessageCard"
             '@context' = "https://schema.org/extensions"
             summary = "$($Log.level): $(Replace-Token -String $Configuration.Format -Source $Log)"
-            text = Replace-Token -String $Configuration.Format -Source $Log
+            text = if ($Configuration.Sanitize) { Get-SanitizedMessage -Message $textMsg -Mask $Configuration.SanitizeMask } else { $textMsg }
             sections = @()
         }
 

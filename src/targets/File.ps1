@@ -1,11 +1,13 @@
 ﻿@{
     Name = 'File'
     Configuration = @{
-        Path        = @{Required = $false;  Type = [string];    Default = $null}
-        Append      = @{Required = $false;  Type = [bool];      Default = $true}
-        Encoding    = @{Required = $false;  Type = [string];    Default = 'utf8'}
-        Level       = @{Required = $false;  Type = [string];    Default = $Logging.Level}
-        Format      = @{Required = $false;  Type = [string];    Default = $Logging.Format}
+        Path         = @{Required = $false;  Type = [string];    Default = $null}
+        Append       = @{Required = $false;  Type = [bool];      Default = $true}
+        Encoding     = @{Required = $false;  Type = [string];    Default = 'utf8'}
+        Level        = @{Required = $false;  Type = [string];    Default = $Logging.Level}
+        Format       = @{Required = $false;  Type = [string];    Default = $Logging.Format}
+        Sanitize     = @{Required = $false;  Type = [bool];      Default = $false}
+        SanitizeMask = @{Required = $false;  Type = [char];      Default = '*'}
     }
 
     Logger = {
@@ -46,6 +48,7 @@
 
         # construct log text
         $Text = "$(Replace-Token -String $Configuration.Format -Source $Log) $Text"
+        $Text = if ($Configuration.Sanitize) { Get-SanitizedMessage -Message $Text -Mask $Configuration.SanitizeMask } else { $Text }
 
         # pathname (ScriptName) must exist for logging to work
         if ($Log.pathname) {
