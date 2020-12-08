@@ -5,13 +5,18 @@ function Merge-DefaultConfig
         [string]$Target,
 
         [Parameter()]
-        [hashtable]$Configuration
+        [hashtable]$Configuration,
+
+        [Parameter()]
+        [string]$Caller
     )
 
     $DefaultConfiguration = $Script:Logging.Targets[$Target].Defaults
     $ParamsRequired = $Script:Logging.Targets[$Target].ParamsRequired
 
-    $result = @{}
+    $result = @{
+        Caller = $Caller
+    }
 
     foreach ($Param in $DefaultConfiguration.Keys)
     {
