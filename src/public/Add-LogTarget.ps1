@@ -35,7 +35,17 @@ function Add-LogTarget
 
     End
     {
-        $Script:Logging.EnabledTargets[$PSBoundParameters.Name] = Merge-DefaultConfig -Target $PSBoundParameters.Name -Configuration $Configuration
+        # adds calling script to configuration. this allows us to have the same target name but from different calling scripts.
+        $callingScript = (Get-PSCallStack)[$Script:Logging.CallerScope] | Select -ExpandProperty ScriptName
+        if ($Script:Logging.EnabledTargets.ContainsKey($PSBoundParameters.Name) -and $Script:Logging.EnabledTargets[$PSBoundParameters.Name].Caller -ne $callingScript) {
+            # target is already added from another calling script, add this target with different calling script
+            [int]$logTargetCount = (($Script:Logging.EnabledTargets.GetEnumerator() | Where { $_.Key -like "$($PSBoundParameters.Name)*" }).Count + 1)
+            $Script:Logging.EnabledTargets["$($PSBoundParameters.Name)__$logTargetCount"] = Merge-DefaultConfig -Target $PSBoundParameters.Name -Configuration $Configuration -Caller $callingScript
+        }
+        else {
+            # target will be added
+            $Script:Logging.EnabledTargets[$PSBoundParameters.Name] = Merge-DefaultConfig -Target $PSBoundParameters.Name -Configuration $Configuration -Caller $callingScript
+        }
 
         if ($Script:Logging.EnabledTargets.ContainsKey('CMTrace') -and $Script:Logging.EnabledTargets.ContainsKey('File') -and (($null -eq $Script:Logging.EnabledTargets['CMTrace'].Path -and $null -eq $Script:Logging.EnabledTargets['File'].Path) -or ($null -ne $Script:Logging.EnabledTargets['CMTrace'].Path -and $null -ne $Script:Logging.EnabledTargets['File'].Path -and $Script:Logging.EnabledTargets['CMTrace'].Path -eq $Script:Logging.EnabledTargets['File'].Path))) {
             # both CMTrace and File has been given
