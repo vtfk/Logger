@@ -108,13 +108,17 @@ Function Write-Log
             {
                 #Enumerating through a collection is intrinsically not a thread-safe procedure
                 for ($targetEnum = $Script:Logging.EnabledTargets.GetEnumerator(); $targetEnum.MoveNext(); ) {
-                    [string] $LoggingTarget = $targetEnum.Current.key
+                    # this will be the actual name in the enabled targets list
+                    [string] $LoggingEnabledTarget = $targetEnum.Current.key
+                    # this will be the actual name in the available targets list
+                    [string] $LoggingTarget = $LoggingEnabledTarget.Split("__")[0]
                     [hashtable] $TargetConfiguration = $targetEnum.Current.Value
                     $Logger = [scriptblock] $Script:Logging.Targets[$LoggingTarget].Logger
 
                     $targetLevelNo = Get-LevelNumber -Level $TargetConfiguration.Level
 
-                    if ($Log.LevelNo -ge $targetLevelNo) {
+                    # if current enabled target calling script is equal to the script caller which has called Write-Log, invoke the Logger
+                    if ($Log.LevelNo -ge $targetLevelNo -and $Script:Logging.EnabledTargets[$LoggingEnabledTarget].Caller -eq $invocationInfo.ScriptName) {
                         Invoke-Command -ScriptBlock $Logger -ArgumentList @($Log, $TargetConfiguration)
                     }
                 }
