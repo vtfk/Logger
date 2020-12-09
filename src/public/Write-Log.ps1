@@ -118,8 +118,10 @@ Function Write-Log
                     $targetLevelNo = Get-LevelNumber -Level $TargetConfiguration.Level
 
                     # if current enabled target calling script is equal to the script caller which has called Write-Log, invoke the Logger
-                    if ($Log.LevelNo -ge $targetLevelNo -and $Script:Logging.EnabledTargets[$LoggingEnabledTarget].Caller -eq $invocationInfo.ScriptName) {
-                        Invoke-Command -ScriptBlock $Logger -ArgumentList @($Log, $TargetConfiguration)
+                    if ($Log.LevelNo -ge $targetLevelNo) {
+                        if (([string]::IsNullOrEmpty($Script:Logging.EnabledTargets[$LoggingEnabledTarget].Caller) -or [string]::IsNullOrEmpty($invocationInfo.ScriptName)) -or ($Script:Logging.EnabledTargets[$LoggingEnabledTarget].Caller -eq $invocationInfo.ScriptName)) {
+                            Invoke-Command -ScriptBlock $Logger -ArgumentList @($Log, $TargetConfiguration)
+                        }
                     }
                 }
             }
