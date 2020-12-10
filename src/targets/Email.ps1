@@ -45,11 +45,12 @@
         }
 
         if ($Log.Body -and $Log.Body.Count -gt 0) {
+            if ($Params.BodyAsHtml) { $Params.Body += "<br><br>`n" } else { $Params.Body += "`n`n" }
             if ($Configuration.Sanitize) {
-                $Params.Body += "`n`n{0}" -f ((Get-SanitizedMessage -Message $Log.Body -Mask $Configuration.SanitizeMask) | ConvertTo-Json)
+                $Params.Body += Get-SanitizedMessage -Message $Log.Body -Mask $Configuration.SanitizeMask | ConvertTo-Json
             }
             else {
-                $Params.Body += "`n`n{0}" -f ($Log.Body | ConvertTo-Json)
+                $Params.Body += $Log.Body | ConvertTo-Json
             }
         }
 
