@@ -44,12 +44,15 @@
         }
 
         if ($Log.Body -and $Log.Body.Count -gt 0) {
-            if ($Configuration.Sanitize) {
-                $Params.Body = Get-SanitizedMessage -Message $Log.Body -Mask $Configuration.SanitizeMask | ConvertTo-Json
+            [string]$body = Replace-Token -String '%message%' -Source $Log
+            if ($Configuration.BodyAsHtml) {
+                $body += "<br><br>`n"
             }
             else {
-                $Params.Body = $Log.Body | ConvertTo-Json
+                $body += "`n`n"
             }
+            
+            $Params.Body = "$body $($Log.Body | ConvertTo-Json)"
         }
         else {
             $body = Replace-Token -String $Configuration.Format -Source $Log
