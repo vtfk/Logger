@@ -9,12 +9,12 @@
         The string used to format the message to log
 
     .EXAMPLE
-        PS C:\> Set-LogDefaultFormat -Format '[%{level:-7}] %{message}'
+        PS C:\> Set-LogDefaultFormat -Format '[%level%] %message%'
 
     .EXAMPLE
         PS C:\> Set-LogDefaultFormat
 
-        It sets the default format as [%{timestamp:+%Y-%m-%d %T%Z}] [%{level:-7}] %{message}
+        It sets the default format as [%{timestamp:+%Y-%m-%d %T%Z}] [%level%] %message%
 
     .LINK
         https://logging.readthedocs.io/en/latest/functions/Set-LogDefaultFormat.md
