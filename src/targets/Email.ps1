@@ -6,6 +6,7 @@
         From         = @{Required = $true;   Type = [string];        Default = $null}
         To           = @{Required = $true;   Type = [string];        Default = $null}
         Subject      = @{Required = $false;  Type = [string];        Default = '[%level%] %message%'}
+        BodyAsHtml   = @{Required = $false;  Type = [bool];          Default = $true}
         Credential   = @{Required = $false;  Type = [pscredential];  Default = $null}
         Level        = @{Required = $false;  Type = [string];        Default = $Logging.Level}
         Port         = @{Required = $false;  Type = [int];           Default = 25}
@@ -32,6 +33,7 @@
             SmtpServer = $Configuration.SMTPServer
             From = $Configuration.From
             To = $Configuration.To.Split(',').Trim()
+            BodyAsHtml = $Configuration.BodyAsHtml
             Port = $Configuration.Port
             UseSsl = $Configuration.UseSsl
             Subject = if ($Configuration.Sanitize) { Get-SanitizedMessage -Message $subject -Mask $Configuration.SanitizeMask } else { $subject }
