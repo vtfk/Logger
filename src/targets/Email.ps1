@@ -5,7 +5,7 @@
         SMTPServer   = @{Required = $true;   Type = [string];        Default = $null}
         From         = @{Required = $true;   Type = [string];        Default = $null}
         To           = @{Required = $true;   Type = [string];        Default = $null}
-        Subject      = @{Required = $false;  Type = [string];        Default = '[%{level:-7}] %{message}'}
+        Subject      = @{Required = $false;  Type = [string];        Default = '[%level%] %message%'}
         Credential   = @{Required = $false;  Type = [pscredential];  Default = $null}
         Level        = @{Required = $false;  Type = [string];        Default = $Logging.Level}
         Port         = @{Required = $false;  Type = [int];           Default = 25}
