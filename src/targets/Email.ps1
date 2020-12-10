@@ -44,7 +44,7 @@
             $Params['Credential'] = $Configuration.Credential
         }
 
-        if ($Log.Body) {
+        if ($Log.Body -and $Log.Body.Count -gt 0) {
             if ($Configuration.Sanitize) {
                 $Params.Body += "`n`n{0}" -f ((Get-SanitizedMessage -Message $Log.Body -Mask $Configuration.SanitizeMask) | ConvertTo-Json)
             }
