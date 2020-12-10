@@ -74,6 +74,7 @@ Write-Log -Message "Some message with social number: 01234567891"
 | [Slack](https://github.com/EsOsO/Logging/wiki/Slack) | Sends the log message to Slack. Create an app in Slack, and pass the [incomming webhook URL](https://api.slack.com/messaging/webhooks#getting_started) in the configuration. |
 | CMTrace | Logs to file as described above, but in the [CMTrace](https://docs.microsoft.com/en-us/mem/configmgr/core/support/cmtrace) format. |
 | Archeo | Logs to [Archeo](https://archeo.communicate.no/). Remember to set ``ApiKey``, ``TransactionId``, ``TransactionType`` and ``TransactionTag`` in the target configuration. |
+| [Email](https://github.com/EsOsO/Logging/wiki/Email) | Send an email with preconfigured subject, from and to. Pass along a `-Body` on `Write-Log` to add more content to mail body |
 
 
 
