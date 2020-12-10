@@ -37,7 +37,12 @@
         }
 
         if ($Log.Body) {
-            $Params.Body += "`n`n{0}" -f ((if ($Configuration.Sanitize) { Get-SanitizedMessage -Message $Log.Body -Mask $Configuration.SanitizeMask } else { $Log.Body }) | ConvertTo-Json)
+            if ($Configuration.Sanitize) {
+                $Params.Body += "`n`n{0}" -f ((Get-SanitizedMessage -Message $Log.Body -Mask $Configuration.SanitizeMask) | ConvertTo-Json)
+            }
+            else {
+                $Params.Body += "`n`n{0}" -f ($Log.Body | ConvertTo-Json)
+            }
         }
 
         Send-MailMessage @Params
