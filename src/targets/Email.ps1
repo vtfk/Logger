@@ -20,7 +20,13 @@
             [hashtable] $Configuration
         )
 
-        $subject = Replace-Token -String '[%level%] %message%' -Source $Log
+        if ($Log.Body -and $Log.Body.Subject) {
+            $subject = $Log.Body.Subject
+            $Log.Body.Remove("Subject")
+        }
+        else {
+            $subject = Replace-Token -String $Configuration.Subject -Source $Log
+        }
         $body = Replace-Token -String $Configuration.Format -Source $Log
         $Params = @{
             SmtpServer = $Configuration.SMTPServer
