@@ -28,7 +28,7 @@
         else {
             $subject = Replace-Token -String $Configuration.Subject -Source $Log
         }
-        $body = Replace-Token -String $Configuration.Format -Source $Log
+
         $Params = @{
             SmtpServer = $Configuration.SMTPServer
             From = $Configuration.From
@@ -37,7 +37,6 @@
             Port = $Configuration.Port
             UseSsl = $Configuration.UseSsl
             Subject = if ($Configuration.Sanitize) { Get-SanitizedMessage -Message $subject -Mask $Configuration.SanitizeMask } else { $subject }
-            Body = if ($Configuration.Sanitize) { Get-SanitizedMessage -Message $body -Mask $Configuration.SanitizeMask } else { $body }
         }
 
         if ($Configuration.Credential) {
@@ -45,12 +44,20 @@
         }
 
         if ($Log.Body -and $Log.Body.Count -gt 0) {
-            if ($Params.BodyAsHtml) { $Params.Body += "<br><br>`n" } else { $Params.Body += "`n`n" }
             if ($Configuration.Sanitize) {
-                $Params.Body += Get-SanitizedMessage -Message $Log.Body -Mask $Configuration.SanitizeMask | ConvertTo-Json
+                $Params.Body = Get-SanitizedMessage -Message $Log.Body -Mask $Configuration.SanitizeMask | ConvertTo-Json
             }
             else {
-                $Params.Body += $Log.Body | ConvertTo-Json
+                $Params.Body = $Log.Body | ConvertTo-Json
+            }
+        }
+        else {
+            $body = Replace-Token -String $Configuration.Format -Source $Log
+            if ($Configuration.Sanitize) {
+                $Params.Body = Get-SanitizedMessage -Message $body -Mask $Configuration.SanitizeMask
+            }
+            else {
+                $Params.Body = $body
             }
         }
 
