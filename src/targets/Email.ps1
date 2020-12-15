@@ -2,18 +2,19 @@
     Name = 'Email'
     Description = 'Send log message to email recipients'
     Configuration = @{
-        SMTPServer   = @{Required = $true;   Type = [string];        Default = $null}
-        From         = @{Required = $true;   Type = [string];        Default = $null}
-        To           = @{Required = $true;   Type = [string];        Default = $null}
-        Subject      = @{Required = $false;  Type = [string];        Default = '[%level%] %message%'}
-        BodyAsHtml   = @{Required = $false;  Type = [bool];          Default = $true}
-        Credential   = @{Required = $false;  Type = [pscredential];  Default = $null}
-        Level        = @{Required = $false;  Type = [string];        Default = $Logging.Level}
-        Port         = @{Required = $false;  Type = [int];           Default = 25}
-        UseSsl       = @{Required = $false;  Type = [bool];          Default = $false}
-        Format       = @{Required = $false;  Type = [string];        Default = $Logging.Format}
-        Sanitize     = @{Required = $false;  Type = [bool];          Default = $false}
-        SanitizeMask = @{Required = $false;  Type = [char];          Default = '*'}
+        SMTPServer   = @{Required = $true;   Type = [string];                Default = $null}
+        From         = @{Required = $true;   Type = [string];                Default = $null}
+        To           = @{Required = $true;   Type = [string];                Default = $null}
+        Subject      = @{Required = $false;  Type = [string];                Default = '[%level%] %message%'}
+        BodyAsHtml   = @{Required = $false;  Type = [bool];                  Default = $true}
+        Encoding     = @{Required = $false;  Type = [System.Text.Encoding];  Default = [System.Text.Encoding]::UTF8}
+        Credential   = @{Required = $false;  Type = [pscredential];          Default = $null}
+        Level        = @{Required = $false;  Type = [string];                Default = $Logging.Level}
+        Port         = @{Required = $false;  Type = [int];                   Default = 25}
+        UseSsl       = @{Required = $false;  Type = [bool];                  Default = $false}
+        Format       = @{Required = $false;  Type = [string];                Default = $Logging.Format}
+        Sanitize     = @{Required = $false;  Type = [bool];                  Default = $false}
+        SanitizeMask = @{Required = $false;  Type = [char];                  Default = '*'}
     }
     Logger = {
         param(
@@ -37,6 +38,10 @@
             Port = $Configuration.Port
             UseSsl = $Configuration.UseSsl
             Subject = if ($Configuration.Sanitize) { Get-SanitizedMessage -Message $subject -Mask $Configuration.SanitizeMask } else { $subject }
+        }
+
+        if ($Configuration.Encoding) {
+            $Params['Encoding'] = $Configuration.Encoding
         }
 
         if ($Configuration.Credential) {
