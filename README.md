@@ -75,8 +75,16 @@ Write-Log -Message "Some message with social number: 01234567891"
 | CMTrace | Logs to file as described above, but in the [CMTrace](https://docs.microsoft.com/en-us/mem/configmgr/core/support/cmtrace) format. |
 | Archeo | Logs to [Archeo](https://archeo.communicate.no/). Remember to set ``ApiKey``, ``TransactionId``, ``TransactionType`` and ``TransactionTag`` in the target configuration. |
 | [Email](https://github.com/EsOsO/Logging/wiki/Email) | Send an email with preconfigured subject, from and to. Pass along a `-Body` on `Write-Log` to add more content to mail body |
+| [Papertrail](https://github.com/vtfk/Logger#papertrail) | Logs to [Papertrail](https://www.papertrail.com/) |
 
+## Log target examples
 
+### Papertrail
+
+```PowerShell
+Add-LogTarget -Name PaperTrail -Configuration @{ Server = "logs.server.com"; Port = 1234; Hostname = "Systemname-this-log-will-be-added-to" }
+Write-Log -Message "Message to log"
+```
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
