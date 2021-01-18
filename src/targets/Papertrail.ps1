@@ -1,5 +1,5 @@
 ﻿@{
-    Name = 'Papertrails'
+    Name = 'Papertrail'
     Configuration = @{
         Server          = @{Required = $false;  Type = [string];    Default = "logs.papertrailapp.com"}
         Port            = @{Required = $true;   Type = [int];       Default = 0}
@@ -66,13 +66,13 @@
 
             if ($Log.Exception.PSobject.Properties.name -match "InvocationInfo")
             {
-                Write-Verbose "[Logger\Papertrails] :: InvocationInfo"
+                Write-Verbose "[Logger\Papertrail] :: InvocationInfo"
                 $exception = $Log.Exception.InvocationInfo.PositionMessage
             }
 
             if ($Log.Exception.PSobject.Properties.name -match "Exception")
             {
-                Write-Verbose "[Logger\Papertrails] :: Exception"
+                Write-Verbose "[Logger\Papertrail] :: Exception"
                 $exception = $Log.Exception.Exception
             }
 
@@ -90,7 +90,7 @@
         }
 
         # Write SysLogMessage
-        Write-Verbose "[Logger/Papertrails] Logging to: $($Params.Server)@$($Params.Port)"
+        Write-Verbose "[Logger/Papertrail] Logging to: $($Params.Server)@$($Params.Port)"
         Send-SyslogMessage @Params
     }
 }

@@ -1,6 +1,6 @@
 ﻿$there = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) "..\src"
 $sut = "Logger"
-$target = "Papertrails"
+$target = "Papertrail"
 
 # remove already imported Logger module (if any)
 Remove-Module -Name Logger -Force -Confirm:$False -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
