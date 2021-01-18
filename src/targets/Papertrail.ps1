@@ -33,7 +33,8 @@
         {
             {$_ -ge 40}                { $Severity = "Error";         $Level = "ERROR" }
             {$_ -ge 30 -and $_ -lt 40} { $Severity = "Warning";       $Level = "WARN" }
-            {$_ -lt 30 -and $_ -gt 10} { $Severity = "Informational"; $Level = "INFO" }
+            {$_ -lt 30 -and $_ -ge 25} { $Severity = "Informational"; $Level = "SUCCESS" }
+            {$_ -lt 25 -and $_ -gt 10} { $Severity = "Informational"; $Level = "INFO" }
             {$_ -le 10 -and $_ -gt 0}  { $Severity = "Debug";         $Level = "DEBUG" }
         }
 
