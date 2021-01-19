@@ -16,14 +16,22 @@
             [hashtable] $Configuration
         )
 
+        # Default prefix for HostName
+        $hostNamePrefix = "PS"
+
         if ($Log.Verbose)
         {
             $VerbosePreference = "Continue"
         }
 
         # Define Hostname, if set to '-', or not set at all, the POSH-syslog module will set this to $env:COMPUTERNAME
-        if ($Configuration.HostName) { $hostname = $Configuration.HostName }
-        else { $hostname = "-" }
+        if ($Configuration.HostName -and !$Configuration.HostName.StartsWith("$($hostNamePrefix)-")) {
+            $hostname = "$($hostNamePrefix)-$($Configuration.HostName)"
+        }
+        elseif ($Configuration.HostName -and $Configuration.HostName.StartsWith("$($hostNamePrefix)-")) {
+            $hostname = $Configuration.HostName
+        }
+        else { $hostname = $hostNamePrefix }
 
         # Define ApplicationName, if set to '-' or not at all, the POSH-syslog module will set this to the closest name in the call stack
         $applicationName = "default"
