@@ -51,7 +51,7 @@
             $FileExtension = ""
         }
 
-        if($Path.StartsWith($logPath)) {
+        if($Path.ToLower().StartsWith($logPath.ToLower())) {
             $Path = "$($Path)$($FileExtension)"
         } else {
             $Path = "$logPath\$($Path)$($FileExtension)"
