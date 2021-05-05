@@ -20,7 +20,7 @@ Create two variables:
 Clone this repository, and then import the folder using ``Import-Module $Path`` 
 
 ```bash
-$ git clone https://github.com/vtfk/Logging
+$ git clone https://github.com/vtfk/Logger
 ```
 
 ## Example Usage
