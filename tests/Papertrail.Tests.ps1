@@ -39,10 +39,6 @@ Describe "Target $target" {
             $targetContent.Configuration.Port | Should Not BeNullOrEmpty
         }
 
-        It "Is Required" {
-            $targetContent.Configuration.Port.Required | Should BeExactly $True
-        }
-
         It "Is of type [Int32]" {
             $targetContent.Configuration.Port.Type.Name | Should BeExactly Int32
         }
@@ -51,10 +47,6 @@ Describe "Target $target" {
     Context "Configuration.HostName" {
         It "Exists" {
             $targetContent.Configuration.HostName | Should Not BeNullOrEmpty
-        }
-
-        It "Is Required" {
-            $targetContent.Configuration.HostName.Required | Should BeExactly $True
         }
 
         It "Is of type [string]" {

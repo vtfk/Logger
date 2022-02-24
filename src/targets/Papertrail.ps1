@@ -2,8 +2,9 @@
     Name = 'Papertrail'
     Configuration = @{
         Server          = @{Required = $false;  Type = [string];    Default = "logs.papertrailapp.com"}
-        Port            = @{Required = $true;   Type = [int];       Default = 0}
-        HostName        = @{Required = $true;   Type = [string];    Default = $null}
+        Port            = @{Required = $false;   Type = [int];       Default = 0}
+        HostName        = @{Required = $false;   Type = [string];    Default = $null}
+        Token           = @{Required = $false;   Type = [string];    Default = $null}
         Facility        = @{Required = $false;  Type = [string];    Default = 'syslog'}
         Level           = @{Required = $false;  Type = [string];    Default = $Logging.Level}
         Sanitize        = @{Required = $false;  Type = [bool];      Default = $false}
@@ -16,6 +17,19 @@
             [hashtable] $Configuration
         )
 
+        if (!$Configuration.Token) {
+            if ($Configuration.Port -eq 0) {
+                Write-Error -Message "Port is required for syslog logging" -ErrorAction Stop
+            }
+            if (!$Configuration.HostName) {
+                Write-Error -Message "HostName is required for syslog logging" -ErrorAction Stop
+            }
+        } else {
+            if (!$Configuration.Server.StartsWith("http")) {
+                Write-Error -Message "Server must be a valid URI" -ErrorAction Stop
+            }
+        }
+<#  #>
         # Default prefix for HostName
         $hostNamePrefix = "PS"
 
@@ -88,7 +102,7 @@
             $Message += " - Exception: $($exception)"
         }
         
-        $Params = @{
+        $UDPParams = @{
             Server          = $Configuration.Server
             Port            = $Configuration.Port
             Message         = $Message
@@ -99,7 +113,15 @@
         }
 
         # Write SysLogMessage
-        Write-Verbose "[Logger/Papertrail] Logging to: $($Params.Server)@$($Params.Port)"
-        Send-SyslogMessage @Params
+        if (!$Configuration.Token) {
+            Write-Verbose "[Logger/Papertrail/Syslog] Logging to: $($UDPParams.Server)@$($UDPParams.Port)"
+            Send-SyslogMessage @UDPParams
+        }
+        else {
+            Write-Verbose "[Logger/Papertrail/HTTP] Logging to: $($UDPParams.Server)"
+            $bytes = [System.Text.Encoding]::ASCII.GetBytes(":$($Configuration.Token)")
+            $base64 = [System.Convert]::ToBase64String($bytes)
+            Invoke-RestMethod -Method "POST" -Uri $Configuration.Server -Headers @{ 'Authorization' = "Basic $base64" } -Body $Message
+        }
     }
 }
