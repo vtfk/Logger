@@ -121,7 +121,7 @@
             Write-Verbose "[Logger/Papertrail/HTTP] Logging to: $($UDPParams.Server)"
             $bytes = [System.Text.Encoding]::ASCII.GetBytes(":$($Configuration.Token)")
             $base64 = [System.Convert]::ToBase64String($bytes)
-            Invoke-RestMethod -Method "POST" -Uri $Configuration.Server -Headers @{ 'Authorization' = "Basic $base64" } -Body $Message | Out-Null
+            Invoke-RestMethod -Method "POST" -Uri $Configuration.Server -Headers @{ 'Authorization' = "Basic $base64" } -Body $Message -ErrorAction SilentlyContinue | Out-Null
         }
     }
 }
