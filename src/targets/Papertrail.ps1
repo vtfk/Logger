@@ -68,6 +68,7 @@
         [string]$Message = "$Level - "
         if ($Log.filename) { $Message += "$($Log.filename) - " }
         if ($Log.caller -and $Log.caller -ne $Log.filename) { $Message += "$($Log.caller) - " }
+        if ($Configuration.Token -and $Configuration.HostName) { $Message += "$($Configuration.HostName) - " }
         $Message += $Log.Message
 
         # Sanitize message
