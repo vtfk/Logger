@@ -1,10 +1,11 @@
 @{
     Name = 'EventLog'
     Configuration = @{
-        LogName      = @{Required = $true;  Type = [string]; Default = $null}
-        Source       = @{Required = $true;  Type = [string]; Default = $null}
-        Sanitize     = @{Required = $false; Type = [bool];   Default = $false}
-        SanitizeMask = @{Required = $false;  Type = [char];  Default = '*'}
+        LogName      = @{Required = $true;  Type = [string];  Default = $null}
+        Source       = @{Required = $true;  Type = [string];  Default = $null}
+        Level        = @{Required = $false;  Type = [string]; Default = $Logging.Level}
+        Sanitize     = @{Required = $false; Type = [bool];    Default = $false}
+        SanitizeMask = @{Required = $false;  Type = [char];   Default = '*'}
     }
     Logger = {
         param(
