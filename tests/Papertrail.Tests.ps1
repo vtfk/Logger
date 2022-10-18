@@ -54,6 +54,20 @@ Describe "Target $target" {
         }
     }
 
+    Context "Configuration.Token" {
+        It "Exists" {
+            $targetContent.Configuration.Token | Should Not BeNullOrEmpty
+        }
+
+        It "Is Required" {
+            $targetContent.Configuration.Token.Required | Should BeExactly $False
+        }
+
+        It "Is of type [string]" {
+            $targetContent.Configuration.Token.Type.Name | Should BeExactly String
+        }
+    }
+
     Context "Configuration.Facility" {
         It "Exists" {
             $targetContent.Configuration.Facility | Should Not BeNullOrEmpty
@@ -65,6 +79,56 @@ Describe "Target $target" {
 
         It "Is of type [string]" {
             $targetContent.Configuration.Facility.Type.Name | Should BeExactly String
+        }
+    }
+
+    Context "Configuration.Level" {
+        It "Exists" {
+            $targetContent.Configuration.Level | Should Not BeNullOrEmpty
+        }
+
+        It "Is NOT Required" {
+            $targetContent.Configuration.Level.Required | Should BeExactly $False
+        }
+
+        It "Is of type [string]" {
+            $targetContent.Configuration.Level.Type.Name | Should BeExactly String
+        }
+    }
+
+    Context "Configuration.Sanitize" {
+        It "Exists" {
+            $targetContent.Configuration.Sanitize | Should Not BeNullOrEmpty
+        }
+
+        It "Is NOT Required" {
+            $targetContent.Configuration.Sanitize.Required | Should BeExactly $False
+        }
+
+        It "Is of type [bool]" {
+            $targetContent.Configuration.Sanitize.Type.Name | Should BeExactly Boolean
+        }
+
+        It "Default is $False" {
+            $targetContent.Configuration.Sanitize.Default | Should BeExactly $False
+        }
+    }
+
+    Context "Configuration.SanitizeMask" {
+        It "Exists" {
+            $targetContent.Configuration.SanitizeMask | Should Not BeNullOrEmpty
+        }
+
+        It "Is NOT Required" {
+            $targetContent.Configuration.SanitizeMask.Required | Should BeExactly $False
+        }
+
+        It "Is of type [bool]" {
+            $targetContent.Configuration.SanitizeMask.Type.Name | Should BeExactly Char
+        }
+
+        It "Default is '*'" {
+            $targetContent.Configuration.SanitizeMask.Default | Should BeExactly '*'
         }
     }
 }

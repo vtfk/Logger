@@ -76,6 +76,42 @@ Describe "Target $target" {
         }
     }
 
+    Context "Configuration.BodyAsHtml" {
+        It "Exists" {
+            $targetContent.Configuration.BodyAsHtml | Should Not BeNullOrEmpty
+        }
+
+        It "Is NOT Required" {
+            $targetContent.Configuration.BodyAsHtml.Required | Should BeExactly $False
+        }
+
+        It "Is of type [bool]" {
+            $targetContent.Configuration.BodyAsHtml.Type.Name | Should BeExactly Boolean
+        }
+
+        It "Default is $False" {
+            $targetContent.Configuration.BodyAsHtml.Default | Should BeExactly $True
+        }
+    }
+
+    Context "Configuration.Encoding" {
+        It "Exists" {
+            $targetContent.Configuration.Encoding | Should Not BeNullOrEmpty
+        }
+
+        It "Is NOT Required" {
+            $targetContent.Configuration.Encoding.Required | Should BeExactly $False
+        }
+
+        It "Is of type [System.Text.Encoding]" {
+            $targetContent.Configuration.Encoding.Type.Name | Should BeExactly 'Encoding'
+        }
+
+        It "Default is UTF8" {
+            $targetContent.Configuration.Encoding.Default.BodyName | Should BeExactly 'utf-8'
+        }
+    }
+
     Context "Configuration.Credential" {
         It "Exists" {
             $targetContent.Configuration.Credential | Should Not BeNullOrEmpty
@@ -147,6 +183,42 @@ Describe "Target $target" {
 
         It "Is of type [string]" {
             $targetContent.Configuration.Format.Type.Name | Should BeExactly String
+        }
+    }
+
+    Context "Configuration.Sanitize" {
+        It "Exists" {
+            $targetContent.Configuration.Sanitize | Should Not BeNullOrEmpty
+        }
+
+        It "Is NOT Required" {
+            $targetContent.Configuration.Sanitize.Required | Should BeExactly $False
+        }
+
+        It "Is of type [bool]" {
+            $targetContent.Configuration.Sanitize.Type.Name | Should BeExactly Boolean
+        }
+
+        It "Default is $False" {
+            $targetContent.Configuration.Sanitize.Default | Should BeExactly $False
+        }
+    }
+
+    Context "Configuration.SanitizeMask" {
+        It "Exists" {
+            $targetContent.Configuration.SanitizeMask | Should Not BeNullOrEmpty
+        }
+
+        It "Is NOT Required" {
+            $targetContent.Configuration.SanitizeMask.Required | Should BeExactly $False
+        }
+
+        It "Is of type [bool]" {
+            $targetContent.Configuration.SanitizeMask.Type.Name | Should BeExactly Char
+        }
+
+        It "Default is '*'" {
+            $targetContent.Configuration.SanitizeMask.Default | Should BeExactly '*'
         }
     }
 }

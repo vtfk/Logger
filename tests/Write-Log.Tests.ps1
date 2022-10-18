@@ -74,6 +74,18 @@ Describe "Write-Log" {
         }
     }
 
+    Context "Arguments parameter" {
+        $attributes = ((Get-Command -Name "Write-Log" | Select -ExpandProperty Parameters).Arguments | Select -ExpandProperty Attributes)
+
+        It "Exists" {
+            $attributes | Should Not BeNullOrEmpty
+        }
+
+        It "Is NOT mandatory" {
+            $attributes.Mandatory | Should BeExactly $False
+        }
+    }
+
     Context "Body parameter" {
         $attributes = ((Get-Command -Name "Write-Log" | Select -ExpandProperty Parameters).Body | Select -ExpandProperty Attributes)
 

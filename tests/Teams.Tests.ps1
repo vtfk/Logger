@@ -75,4 +75,40 @@ Describe "Target $target" {
             $targetContent.Configuration.ColorMapping.Type.Name | Should BeExactly Hashtable
         }
     }
+
+    Context "Configuration.Sanitize" {
+        It "Exists" {
+            $targetContent.Configuration.Sanitize | Should Not BeNullOrEmpty
+        }
+
+        It "Is NOT Required" {
+            $targetContent.Configuration.Sanitize.Required | Should BeExactly $False
+        }
+
+        It "Is of type [bool]" {
+            $targetContent.Configuration.Sanitize.Type.Name | Should BeExactly Boolean
+        }
+
+        It "Default is $False" {
+            $targetContent.Configuration.Sanitize.Default | Should BeExactly $False
+        }
+    }
+
+    Context "Configuration.SanitizeMask" {
+        It "Exists" {
+            $targetContent.Configuration.SanitizeMask | Should Not BeNullOrEmpty
+        }
+
+        It "Is NOT Required" {
+            $targetContent.Configuration.SanitizeMask.Required | Should BeExactly $False
+        }
+
+        It "Is of type [bool]" {
+            $targetContent.Configuration.SanitizeMask.Type.Name | Should BeExactly Char
+        }
+
+        It "Default is '*'" {
+            $targetContent.Configuration.SanitizeMask.Default | Should BeExactly '#'
+        }
+    }
 }
