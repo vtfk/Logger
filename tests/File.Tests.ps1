@@ -1,4 +1,4 @@
-$there = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) "..\src"
+﻿$there = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) "..\src"
 $logFile = ($MyInvocation.MyCommand.Path).Replace($env:SCRIPT_DIR, $env:LOG_DIR).Replace(".ps1", ".log")
 $sut = "Logger"
 $target = "File"
@@ -134,6 +134,21 @@ Describe "Target $target" {
             $targetContent.Configuration.SanitizeMask.Default | Should BeExactly '*'
         }
     }
+
+    Context "Configuration.RolloverType" {
+        It "Exists" {
+            $targetContent.Configuration.RolloverType | Should Not BeNullOrEmpty
+        }
+
+        It "Is NOT Required" {
+            $targetContent.Configuration.RolloverType.Required | Should BeExactly $False
+        }
+
+        It "Is of type [bool]" {
+            $targetContent.Configuration.RolloverType.Type.Name | Should BeExactly String
+        }
+    }
+
     Context "Output syntax is correct" {
         Add-LogTarget -Name $target
         Write-Log -Message "First" -Level INFO

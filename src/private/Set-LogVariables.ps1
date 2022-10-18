@@ -16,6 +16,11 @@ function Set-LogVariables
     $Script:WARNING = 30
     $Script:ERROR_ = 40
 
+    $Script:NONE = 0
+    $Script:WEEK = 1
+    $Script:MONTH = 2
+    $Script:YEAR = 3
+
     New-Variable -Name LevelNames           -Scope Script -Option ReadOnly -Value ([hashtable]::Synchronized(@{
         $NOTSET   = 'NOTSET'
         $ERROR_   = 'ERROR'
@@ -31,6 +36,13 @@ function Set-LogVariables
         'SUCCESS' = $SUCCESS
     }))
 
+    New-Variable -Name RolloverTypes             -Scope Script -Option ReadOnly -Value ([hashtable]::Synchronized(@{
+        'NONE'  = $NONE
+        'WEEK'  = $WEEK
+        'MONTH' = $MONTH
+        'YEAR'  = $YEAR
+    }))
+
     New-Variable -Name ScriptRoot           -Scope Script -Option ReadOnly -Value ([System.IO.Path]::GetDirectoryName($MyInvocation.MyCommand.Module.Path))
     New-Variable -Name Defaults             -Scope Script -Option ReadOnly -Value @{
         Level           = 'INFO'
@@ -39,6 +51,7 @@ function Set-LogVariables
         Timestamp       = 'dd.MM.yyyy HH:mm:ss'
         CallerScope     = 1
         CallerShortcut  = '%1'
+        RolloverType    = $RolloverTypes['NONE']
     }
 
     New-Variable -Name Logging              -Scope Script -Option ReadOnly -Value ([hashtable]::Synchronized(@{
@@ -47,6 +60,7 @@ function Set-LogVariables
         Format         = $Defaults.Format
         CallerScope    = $Defaults.CallerScope
         CallerShortcut = $Defaults.CallerShortcut
+        RolloverType   = $RolloverTypes['NONE']
         CustomTargets  = [String]::Empty
         Targets        = ([System.Collections.Concurrent.ConcurrentDictionary[string, hashtable]]::new([System.StringComparer]::InvariantCultureIgnoreCase))
         EnabledTargets = ([System.Collections.Concurrent.ConcurrentDictionary[string, hashtable]]::new([System.StringComparer]::InvariantCultureIgnoreCase))

@@ -1,4 +1,4 @@
-# Logger
+﻿# Logger
 
 Modular PowerShell logging module, forked from [EsOsO/Logging](https://github.com/EsOsO/Logging).
 
@@ -88,6 +88,7 @@ Encondig     = "UTF8" # Defaults to utf8
 Level        = "INFO" # Set at which level (and higher) this target will start to log. Defaults to INFO
 Sanitize     = $True || $False # Turn sanitization on / off. Defaults to $False
 SanitizeMask = "*" # Set which char to use for masked text. Defaults to "*"
+RolloverType = "NONE || WEEK || MONTH || YEAR" # If set to other than NONE, Logger will automatically rollover logfile according to Type. Defaults to NONE
 ```
 
 `example`
@@ -97,6 +98,14 @@ Write-Log -Message "Message to log (will be logged to cmtrace file since this is
 Write-Log -Message "Message to log (will also be logged to cmtrace file since this is logged with INFO level or higher" -Level WARNING
 ```
 
+`example with Rollover`
+```PowerShell
+# If this is executed on a tuesday, this will be logged in a file named "Hey there_tuesday.log".
+# If file name "Hey there_tuesday.log" already existed and is older than today, it will be removed before logged to
+Add-LogTarget -Name CMTrace -Configuration @{ Path = "Hey there"; Level = "INFO"; RolloverType = "WEEK" }
+Write-Log -Message "Message to log (will be logged to cmtrace file since this is logged with INFO level" -Level INFO
+Write-Log -Message "Message to log (will also be logged to cmtrace file since this is logged with INFO level or higher" -Level WARNING
+```
 
 ### Console
 
@@ -169,6 +178,7 @@ Level        = "INFO" # Set at which level (and higher) this target will start t
 Format       = "[%timestamp%] [%level%] - [%message%]" # Set which format to use for log output. Defaults to "[%timestamp%] [%level%] - [%message%]"
 Sanitize     = $True || $False # Turn sanitization on / off. Defaults to $False
 SanitizeMask = "*" # Set which char to use for masked text. Defaults to "*"
+RolloverType = "NONE || WEEK || MONTH || YEAR" # If set to other than NONE, Logger will automatically rollover logfile according to Type. Defaults to NONE
 ```
 
 `example`
@@ -178,6 +188,14 @@ Write-Log -Message "Message to log (will be logged to file since this is logged 
 Write-Log -Message "Message to log (will also be logged to file since this is logged with INFO level or higher" -Level WARNING
 ```
 
+`example with Rollover`
+```PowerShell
+# If this is executed on a tuesday, this will be logged in a file named "Hey there_tuesday.log".
+# If file name "Hey there_tuesday.log" already existed and is older than today, it will be removed before logged to
+Add-LogTarget -Name File -Configuration @{ Path = "Hey there"; Level = "INFO"; RolloverType = "WEEK" }
+Write-Log -Message "Message to log (will be logged to file since this is logged with INFO level" -Level INFO
+Write-Log -Message "Message to log (will also be logged to file since this is logged with INFO level or higher" -Level WARNING
+```
 
 ### Papertrail
 
