@@ -7,7 +7,7 @@
         Icons   = @{Required = $false; Type = [hashtable]; Default = @{
                 'ERROR'   = ':fire:'
                 'WARNING' = ':warning:'
-                'INFO'    = ':exclamation'
+                'INFO'    = ':exclamation:'
                 'DEBUG'   = ':eyes:'
             }
         }
