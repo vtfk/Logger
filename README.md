@@ -23,10 +23,10 @@ Clone this repository, and then import the folder using ``Import-Module $Path``
 $ git clone https://github.com/vtfk/Logger
 ```
 
-## Example Usage
+## Example Usage for testing
 
 ```powershell
-Import-Module /path/to/cloned/repository
+Import-Module /path/to/cloned/repository/Logger.psm1
 
 # Adds the Console target to make Write-Log output to Console. 
 Add-LogTarget -Name Console 
@@ -45,6 +45,23 @@ Add-LogTarget -Name CMtrace -Configuration @{ Path = "%1_Test.log" }
 ```
 
 For more examples, please take a quick look at [example.ps1](https://github.com/vtfk/Logger/blob/master/Example.ps1) or head over to [EsOsO/Logging's wiki](https://github.com/EsOsO/Logging/wiki).
+
+## Set up global module on server
+Clone this repository or sync it if you already have it
+
+```bash
+$ git clone https://github.com/vtfk/Logger
+```
+
+- Check PSModule path in system environment variables
+- Copy the src folder into the PSModule path directory
+
+You should now be able to use
+```powershell
+Import-Module Logger
+```
+In your ps1 script
+
 
 ## Sanitizing log message
 
@@ -223,6 +240,25 @@ Write-Log -Message "Message to log (will be logged to papertrail since this is l
 Add-LogTarget -Name PaperTrail -Configuration @{ Server = "logs.server.com"; Token = "secret"; Level = "WARNING" }
 Write-Log -Message "Message to log (will not be logged to papertrail since this is logged with INFO level" -Level INFO
 Write-Log -Message "Message to log (will be logged to papertrail since this is logged with WARNING level or higher" -Level ERROR
+```
+
+### Betterstack
+
+`options`
+```PowerShell
+Url          = "betterstack.com" # Set server to log to. Defaults to logs.papertrailapp.com
+Token        = "secret" # Set the token for betterstack source.
+HostName     = "SoftwareName" # Set which HostName to use. Requires Port aswell.
+Level        = "INFO" # Set at which level (and higher) this target will start to log. Defaults to INFO
+Sanitize     = $True || $False # Turn sanitization on / off. Defaults to $False
+SanitizeMask = "*" # Set which char to use for masked text. Defaults to "*"
+```
+
+`example`
+```PowerShell
+Add-LogTarget -Name Betterstack -Configuration @{ Url = "betterstack.com"; Token = "secret"; Level = "WARNING" }
+Write-Log -Message "Message to log (will not be logged to betterstack since this is logged with INFO level" -Level INFO
+Write-Log -Message "Message to log (will be logged to betterstack since this is logged with WARNING level or higher" -Level ERROR
 ```
 
 ### Slack
