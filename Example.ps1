@@ -10,10 +10,10 @@ Add-LogTarget -Name Console -Configuration @{ Level = "DEBUG" }
 #Add-LogTarget -Name File -Configuration @{ Level = "DEBUG" }
 
 ### uncomment to add Teams target to make Write-Log output to a teams channel. Default Level is INFO. Required Configurations: WebHook
-#Add-LogTarget -Name Teams -Configuration @{ Level = "DEBUG"; WebHook = "https://outlook.office.com/webhook/b53e85ed-17d2-47d8-bb8d-d41ac0fbfad9@8ed93b19-ec03-482e-9854-302f1cd48360/IncomingWebhook/6e697fa62d9045d2ba853755c915450d/130ac7e2-6a62-41d5-9423-92994fdef987" }
+#Add-LogTarget -Name Teams -Configuration @{ Level = "DEBUG"; WebHook = "{teams webhook}" }
 
 ### uncomment to add Betterstack target to make Write-Log output to a betterstack. Default Level is INFO. Required Configurations: Url and Token
-#Add-LogTarget -Name Betterstack -Configuration @{ Level = "DEBUG"; Url = "https://s1183309.eu-nbg-2.betterstackdata.com"; Token = "4Hx6SW3hSaoMP2ebfGMNWLJ3" }
+#Add-LogTarget -Name Betterstack -Configuration @{ Level = "DEBUG"; Url = "https://{betterstackurl}.com"; Token = "{sourcetoken}" }
 
 # Default Level is INFO
 Write-Log -Message "Hei Hå!"
