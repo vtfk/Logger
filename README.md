@@ -54,7 +54,8 @@ $ git clone https://github.com/vtfk/Logger
 ```
 
 - Check PSModule path in system environment variables
-- Copy the src folder into the PSModule path directory
+- Check if you already have a folder in the PSModule path called "Logger" - if not create it
+- Copy the contents of the src folder into Logger directory
 
 You should now be able to use
 ```powershell
