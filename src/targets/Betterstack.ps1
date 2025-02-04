@@ -98,7 +98,7 @@
              
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 # OMG, this is needed for the Invoke-RestMethod to work with TLS 1.2
         try{
-            Invoke-RestMethod -Method "POST" -Uri $Configuration.Url -Headers @{ 'Authorization' = "Bearer $($Configuration.Token)"; 'Content-Type' = "application/json" } -Body $Message | Out-Null #-ErrorAction SilentlyContinue
+            Invoke-RestMethod -Method "POST" -Uri $Configuration.Url -Headers @{ 'Authorization' = "Bearer $($Configuration.Token)" } -ContentType "application/json; charset=utf-8" -Body $Message | Out-Null #-ErrorAction SilentlyContinue
            
         } catch {
             Write-Error -Message "Failed to send log to Betterstack: $temp" -ErrorAction Stop
