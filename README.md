@@ -53,7 +53,7 @@ Clone this repository or sync it if you already have it
 $ git clone https://github.com/vtfk/Logger
 ```
 
-- Check PSModule path in system environment variables
+- Check PSModule path in system environment variables (`$env:PSModulePath`)
 - Check if you already have a folder in the PSModule path called "Logger" - if not create it
 - Copy the contents of the src folder into Logger directory
 
@@ -91,8 +91,9 @@ Write-Log -Message "Some message with social number: 01234567891"
 | [EventLog](https://github.com/EsOsO/Logging/wiki/WinEventLog) | Logs to EventLog. <br>Before you can log events you need to make sure that the LogName and Source exists. This needs to be done only once (run as an Administrator): <br>``$ New-EventLog -LogName <Application/System/...> -Source ScriptName``  |
 | [File](https://github.com/EsOsO/Logging/wiki/File) | Logs to file. If the file or directory doesn't exist, it will be created. |
 | [Papertrail](https://github.com/vtfk/Logger#papertrail) | Logs to [Papertrail](https://www.papertrail.com/) |
-| [Slack](https://github.com/EsOsO/Logging/wiki/Slack) | Sends the log message to Slack. Create an app in Slack, and pass the [incomming webhook URL](https://api.slack.com/messaging/webhooks#getting_started) in the configuration. |
-| [Teams](https://github.com/EsOsO/Logging/wiki/Teams) | Sends the log message to Microsoft Teams. Pass the [incomming webhook URL](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook#add-an-incoming-webhook-to-a-teams-channel) in the configuration. |
+| [Betterstack](https://github.com/vtfk/Logger#betterstack) | Logs to [Betterstack](https://www.betterstack.com/) |
+| [Slack](https://github.com/EsOsO/Logging/wiki/Slack) | Sends the log message to Slack. Create an app in Slack, and pass the [incoming webhook URL](https://api.slack.com/messaging/webhooks#getting_started) in the configuration. |
+| [Teams](https://github.com/EsOsO/Logging/wiki/Teams) | Sends the log message to Microsoft Teams. Pass the [incoming webhook URL](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook#add-an-incoming-webhook-to-a-teams-channel) in the configuration. |
 
 ## Log target options / examples
 
